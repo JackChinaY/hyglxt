@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>党政会议云记录管理平台</title>
-    <link rel="shortcut icon" type="image/x-icon" href="plugs/image/favicon.ico"/>
-    <link rel="stylesheet" href="plugs/layui/css/layui.css">
-    <script src="plugs/javascript/jquery-1.11.3.min.js"></script>
-    <script src="plugs/javascript/jquery.cookie.js"></script>
-    <script src="plugs/layui/layui.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="./plugs/image/favicon.ico"/>
+    <link rel="stylesheet" href="./plugs/zui/zui.css">
+    <script src="./plugs/javascript/jquery-1.11.3.min.js"></script>
+    <script src="./plugs/javascript/jquery.cookie.js"></script>
+    <script src="./plugs/javascript/layer.js"></script>
+    <script src="./plugs/zui/zui.js"></script>
     <script type="text/javascript">
         $(function () {
             /**
@@ -94,9 +95,9 @@
 
         /*登录框区*/
         .box-content {
-            width: 300px;
+            width: 400px;
             /*上右下左*/
-            padding: 50px 60px 70px 60px;
+            padding: 30px 60px 70px 60px;
             background: rgba(0, 0, 0, 0.6);
             /*background: rgba(255, 255, 255, 0.2);*/
             border-radius: 12px;
@@ -105,7 +106,7 @@
         /*版权申明处，底部水平居中*/
         .box-footer {
             position: absolute;
-            bottom: 0px;
+            bottom: -10px;
             left: 50%;
             transform: translate(-50%, -50%);
         }
@@ -118,6 +119,12 @@
     </style>
 </head>
 <body>
+<!--背景视频-->
+<!--<div style="height: 100%;width: 100%;position: fixed; background: black">-->
+<!--<video style="height: 100%;width: 100%;object-fit: fill" autoplay="autoplay" loop="loop">-->
+<!--<source src="image/video.mp4" type="video/mp4">-->
+<!--</video>-->
+<!--</div>-->
 <!--背景图片-->
 <div style="height: 100%;width: 100%;position: fixed; background: black;opacity: 0.8">
     <img src="./plugs/image/bg.jpg" style="height: 100%;width: 100%">
@@ -130,21 +137,21 @@
             <h2>党政会议云记录管理平台</h2>
         </div>
         <br>
-        <div class="layui-form-item">
-            <input id="username" name="login" type="text" class="layui-input" placeholder="用户名"
+        <div class="input-control has-icon-left">
+            <input id="username" name="login" type="text" class="form-control" placeholder="用户名"
                    style="ime-mode: disabled" maxlength="30"
                    onkeyup="this.value=this.value.replace(/[^\da-zA-Z]/g,'')">
             <label for="username" class="input-control-icon-left"><i class="icon icon-user"></i></label>
         </div>
         <br>
-        <div class="layui-form-item">
-            <input id="password" name="login" type="password" class="layui-input" placeholder="密码"
+        <div class="input-control has-icon-left">
+            <input id="password" name="login" type="password" class="form-control" placeholder="密码"
                    style="ime-mode: disabled" maxlength="30"
                    onkeyup="this.value=this.value.replace(/[^\da-zA-Z]/g,'')">
             <label for="password" class="input-control-icon-left"><i class="icon icon-lock"></i></label>
         </div>
         <br>
-        <input id="button_login" class="layui-btn" type="button" style="width: 100%" value="登录">
+        <input id="button_login" class="btn btn-primary" type="button" style="width: 100%" value="登录">
         <br>
     </div>
 </div>

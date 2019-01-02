@@ -4,714 +4,426 @@
     <meta charset="UTF-8">
     <title>cashier</title>
     <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
-    <link rel="stylesheet" href="../plugs/zui/zui.css">
-    <link rel="stylesheet" href="../plugs/zui/zui.datagrid.css">
+    <link rel="stylesheet" href="../plugs/layui/css/layui.css">
+    <!--<link rel="stylesheet" href="../plugs/zui/zui.css">-->
+    <!--<link rel="stylesheet" href="../plugs/zui/zui.datagrid.min.css">-->
     <script src="../plugs/javascript/jquery-1.11.3.min.js"></script>
-    <script src="../plugs/javascript/jquery.cookie.js"></script>
-    <script src="../plugs/javascript/layer.js"></script>
-    <script src="../plugs/zui/zui.js"></script>
-    <script src="../plugs/zui/zui.datagrid.js"></script>
+    <!--<script src="../plugs/javascript/jquery.cookie.js"></script>-->
+    <!--<script src="../plugs/javascript/layer.js"></script>-->
+    <!--<script src="../plugs/zui/zui.js"></script>-->
+    <!--<script src="../plugs/zui/zui.datagrid.min.js"></script>-->
+    <script src="../plugs/layui/layui.js"></script>
+
     <script type="text/javascript">
         $(function () {
-            /**
-             *在此统一定义一些常用字符串
-             */
-            var loginTimeout = "Login timeout, please login again !";
-            var serverError = "possible reasons：server error !";
-            /*******************************************************************************************/
-            // 手动初始化工具提示
-            $('[data-toggle="tooltip"]').tooltip();
-            //页面加载时自动执行的函数，生成表格
-            // findAllCashiers();
-            /*******************************************************************************************/
-            //增加按钮，添加收银员
-            $("#submit1").click(function () {
-                getCashiersMaxNumber();
-                getCashiersMaxCode();
-                $("#myModal1").modal({moveable: true});   //显示对话框
-            });
+            layui.use('table', function () {
+                var table = layui.table;
 
-            //查询收银员最大编号，并填充加1后的数值
-            function getCashiersMaxNumber() {
-                $.ajax({
-                    type: "GET",
-                    url: "ActionPart1_getCashiersMaxNumber.action",
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    dataType: "json",
-                    cache: false,
-                    async: false,//设置为同步
-                    success: function (data) {
-                        //登录超时，请重新登录
-                        if (data.jsonObject == "-3") {
-                            new $.zui.Messager(loginTimeout, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                            setTimeout(function () {
-                                top.location.href = "../login.html";//重定向
-                            }, 2000);
-                        }
-                        //可能原因：服务器出错
-                        else if (data.jsonObject == "-1") {
-                            new $.zui.Messager(serverError, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if (data.jsonObject == "null") {
-                            //null代表数据表为空，编号从1开始
-                            $("#number").html(1);
-                        } else {
-                            $("#number").html(parseInt(data.jsonObject) + 1);//商品编号最大值加1
-                        }
-                    },
-                    error: function (jqXHR) {
-                        //操作失败，可能原因
-                        new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                            type: 'danger',
-                            placement: 'top' // 定义显示位置
-                        }).show();
-                    }
-                });
-            }
-
-            //查询收银员最大代码，并填充加1后的数值
-            function getCashiersMaxCode() {
-                $.ajax({
-                    type: "GET",
-                    url: "ActionPart1_getCashiersMaxCode.action",
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    dataType: "json",
-                    cache: false,
-                    async: false,//设置为同步
-                    success: function (data) {
-                        //登录超时，请重新登录
-                        if (data.jsonObject == "-3") {
-                            new $.zui.Messager(loginTimeout, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                            setTimeout(function () {
-                                top.location.href = "../login.html";//重定向
-                            }, 2000);
-                        }
-                        //可能原因：服务器出错
-                        else if (data.jsonObject == "-1") {
-                            new $.zui.Messager(serverError, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if (data.jsonObject == "null") {
-                            //null代表数据表为空，编号从1开始
-                            $("#code").val("001");
-                            $("#code_flag1").show();//对号
-                            $("#code_flag2").hide();//叉号
-                            $("#code_info").html(1);//0代表已存在，1代表可用
-                        } else {
-                            //如果数据库中有数据
-                            if (parseInt(data.jsonObject) <= 996) {
-                                $("#code").val(buquan(parseInt(data.jsonObject) + 1, 3));//code最大值加1,并保留三位数据，如1，保留为001
-                                $("#code_flag1").show();//对号
-                                $("#code_flag2").hide();//叉号
-                                $("#code_info").html(1);//0代表已存在，1代表可用
-                            } else if (parseInt(data.jsonObject) == 997) {
-                                $("#code").val(999);//code最大值加1,并保留三位数据，如1，保留为001
-                                $("#code_flag1").show();//对号
-                                $("#code_flag2").hide();//叉号
-                                $("#code_info").html(1);//0代表已存在，1代表可用
-                            } else if (parseInt(data.jsonObject) == 999) {
-                                $("#code").val(999);//code最大值加1,并保留三位数据，如1，保留为001
-                                $("#code_flag1").hide();//对号
-                                $("#code_flag2").show();//叉号
-                                $("#code_info").html(0);//0代表已存在，1代表可用
-                                new $.zui.Messager("The code must between 001-999, and the 999 is already existed in the database.", {
-                                    type: 'danger',
-                                    placement: 'top', // 定义显示位置
-                                    time: '10000'
-                                }).show();
-                            }
-                        }
-                    },
-                    error: function (jqXHR) {
-                        //操作失败，可能原因
-                        new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                            type: 'danger',
-                            placement: 'top' // 定义显示位置
-                        }).show();
-                    }
-                });
-            }
-
-            //验证验证收银员code是否存在
-            $("#code").blur(function () {
-                if ($("#code").val() == "") {
-                    new $.zui.Messager('The Code can not be empty!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#code").val() == "000") {
-                    new $.zui.Messager('The Code can not be "000"!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#code").val() == "998") {
-                    new $.zui.Messager('The Code can not be "998"!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#code").val().length != 3) {
-                    new $.zui.Messager('The length of the Code is fixed 3 numbers!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "ActionPart1_verifyCashierCode.action",
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data: {
-                            "value1": $("#code").val()
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            //登录超时，请重新登录
-                            if (data.jsonObject == "-3") {
-                                new $.zui.Messager(loginTimeout, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                                setTimeout(function () {
-                                    top.location.href = "../login.html";//重定向
-                                }, 2000);
-                            }
-                            //服务器出错
-                            else if (data.jsonObject == "-1") {
-                                new $.zui.Messager(serverError, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                            }
-                            //正确传输过来数据
-                            else {
-                                if (data.jsonObject == "0") {
-                                    $("#code_flag1").show();//对号
-                                    $("#code_flag2").hide();//叉号
-                                    $("#code_info").html(1);//0代表已存在，1代表可用
-                                } else if (data.jsonObject == "1") {
-                                    $("#code_flag1").hide();//对号
-                                    $("#code_flag2").show();//叉号
-                                    $("#code_info").html(0);//0代表已存在，1代表可用
-                                    new $.zui.Messager('The Code already existed in the database. Please re-enter it !', {
-                                        type: 'danger',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                }
-                            }
-                        },
-                        error: function (jqXHR) {
-                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        }
-                    });
-                }
-            });
-            //保存新增的收银员
-            $("#submit1_1").click(function () {
-                if ($("#code").val() == "") {
-                    new $.zui.Messager('The Code can not be empty!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#code").val() == "000") {
-                    new $.zui.Messager('The Code can not be "000"!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#code").val() == "998") {
-                    new $.zui.Messager('The Code can not be "998"!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#code").val().length != 3) {
-                    new $.zui.Messager('The length of the Code is fixed 3 numbers!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#code_info").text() == "0") {
-                    new $.zui.Messager('The Code already existed in the database. Please re-enter it !', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#name").val() == "") {
-                    new $.zui.Messager('The Name can not be empty!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#name").val().trim() == "") {
-                    new $.zui.Messager('The Name can not be all spaces!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#password").val() == "") {
-                    new $.zui.Messager('The Password can not be empty!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#password").val().length != 6) {
-                    new $.zui.Messager('The length of the Password must be 6 numbers!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#password").val().indexOf(" ") != -1) {
-                    new $.zui.Messager('The Password can not contain space!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#re_password").val() == "") {
-                    new $.zui.Messager('The Re-Password can not be empty!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#re_password").val().length != 6) {
-                    new $.zui.Messager('The length of the Re-Password must be 6 numbers!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#re_password").val().indexOf(" ") != -1) {
-                    new $.zui.Messager('The Password can not contain space!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#re_password").val() != $("#password").val()) {
-                    new $.zui.Messager('The Password and Re-Password are inconsistent!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "ActionPart1_saveCashier.action",
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data: {
-                            "value1": $("#number").text(),
-                            "value2": $("#code").val(),
-                            "value3": $("#name").val(),
-                            "value4": $("#password").val()
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            //登录超时，请重新登录
-                            if (data.jsonObject == "-3") {
-                                new $.zui.Messager(loginTimeout, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                                setTimeout(function () {
-                                    top.location.href = "../login.html";//重定向
-                                }, 2000);
-                            }
-                            //服务器出错
-                            else if (data.jsonObject == "-1") {
-                                new $.zui.Messager(serverError, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                            }
-                            //正确传输过来数据
-                            else {
-                                if (data.jsonObject == "0") {
-                                    new $.zui.Messager('Submission failure. Please re-enter it !', {
-                                        type: 'danger',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                } else if (data.jsonObject == "1") {
-                                    new $.zui.Messager('Submit successfully !', {
-                                        type: 'success',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                    $("#myModal1").modal('hide');   //显示对话框
-                                    findAllCashiers();//刷新页面
-                                    //将原输入框内容置零
-                                    $("#name").val("");
-                                    $("#password").val("");
-                                    $("#re_password").val("");
-                                }
-                            }
-                        },
-                        error: function (jqXHR) {
-                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        }
-                    });
-                }
-            });
-            /*******************************************************************************************/
-            //查询所有收银员 点击事件
-            $("#submit2").click(function () {
-                findAllCashiers();
-            });
-
-            //查询所有收银员 无参
-            function findAllCashiers() {
-                //查询所有收银员
-                $.ajax({
-                    type: "POST",
-                    url: "ActionPart1_findAllCashiers.action",
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    dataType: "json",
-                    cache: false,
-                    success: function (data) {
-                        //登录超时，请重新登录
-                        if (data.jsonObject == "-3") {
-                            new $.zui.Messager(loginTimeout, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                            setTimeout(function () {
-                                top.location.href = "../login.html";//重定向
-                            }, 2000);
-                        }
-                        //服务器出错
-                        else if (data.jsonObject == "-1") {
-                            new $.zui.Messager(serverError, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        }
-                        //正确传输过来数据
-                        else {
-                            //后台传过来的是json数组的字符串，需要先转成json数组对象
-                            var jsonArray = $.parseJSON(data.jsonObject);
-                            //当数组为[]空时
-                            if (jsonArray.length == 0) {
-                                $("#thead").html('<tr><th>No data！</th></tr>');
-                                $("#tbody").html('');
-                            }
-                            //当数组为不为空时
-                            else if (jsonArray.length != 0) {
-                                var head = '<tr><th>Number</th><th>Name</th><th>Code</th><th>Password</th><th>Operation</th></tr>';
-                                $("#thead").html(head);
-                                var html;
-                                for (var i = 0; i < jsonArray.length; i++) {
-                                    html += '<tr><td class="Id">' + jsonArray[i].value1 + '</td>'
-                                        + '<td class="Name">' + jsonArray[i].value2 + '</td>'
-                                        + '<td class="Code">' + jsonArray[i].value3 + '</td>'
-                                        + '<td class="Password">' + jsonArray[i].value4 + '</td>'
-                                        + '<td>&nbsp;&nbsp;<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="Modify"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="delete" href="#" data-toggle="tooltip" data-tip-class="tooltip-danger" title="Delete" style="color: #ea644a"><i class="icon icon-trash"></i></a></td></tr>';
-                                }
-                                $("#tbody").html(html);
-                                // 手动初始化工具提示
-                                $('[data-toggle="tooltip"]').tooltip();
-                            }
-                        }
-                    },
-                    error: function (jqXHR) {
-                        new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                            type: 'danger',
-                            placement: 'top' // 定义显示位置
-                        }).show();
-                    }
-                });
-            }
-
-            /*******************************************************************************************/
-            //修改按钮，修改收银员
-            $("#tbody").on("click", "a[name='update']", function () {
-                //数据初始化
-                $("#number2").html($(this).parents("tr").find(".Id").text());
-                $("#code2").html($(this).parents("tr").find(".Code").text());
-                $("#name2").val($(this).parents("tr").find(".Name").text());
-                $("#password2").val($(this).parents("tr").find(".Password").text());
-                $("#re_password2").val($(this).parents("tr").find(".Password").text());
-                $("#myModal2").modal({moveable: true});//显示对话框
-            });
-            //保存修改后的收银员
-            $("#submit3").click(function () {
-                if ($("#name2").val().trim() == "") {
-                    new $.zui.Messager('The Name can not be all spaces!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#password2").val() == "") {
-                    new $.zui.Messager('The Password can not be empty!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#password2").val().length != 6) {
-                    new $.zui.Messager('The length of the Password must be 6 numbers!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#password2").val().indexOf(" ") != -1) {
-                    new $.zui.Messager('The Password can not contain space!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#re_password2").val() == "") {
-                    new $.zui.Messager('The Re-Password can not be empty!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#re_password2").val().length != 6) {
-                    new $.zui.Messager('The length of the Re-Password must be 6 numbers!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#re_password2").val().indexOf(" ") != -1) {
-                    new $.zui.Messager('The Re-Password can not contain space!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#re_password2").val() != $("#password2").val()) {
-                    new $.zui.Messager('The Password and Re-Password are inconsistent!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "ActionPart1_modifyCashier.action",
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data: {
-                            "value1": $("#number2").text(),
-                            "value2": $("#code2").text(),
-                            "value3": $("#name2").val(),
-                            "value4": $("#password2").val()
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            //登录超时，请重新登录
-                            if (data.jsonObject == "-3") {
-                                new $.zui.Messager(loginTimeout, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                                setTimeout(function () {
-                                    top.location.href = "../login.html";//重定向
-                                }, 2000);
-                            }
-                            //服务器出错
-                            else if (data.jsonObject == "-1") {
-                                new $.zui.Messager(serverError, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                            }
-                            //正确传输过来数据
-                            else {
-                                if (data.jsonObject == "0") {
-                                    new $.zui.Messager('Submission failure. Please re-enter it !', {
-                                        type: 'danger',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                } else if (data.jsonObject == "1") {
-                                    new $.zui.Messager('Submit successfully !', {
-                                        type: 'success',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                    $("#myModal2").modal('hide');   //显示对话框
-                                    findAllCashiers();
-                                }
-                            }
-                        },
-                        error: function (jqXHR) {
-                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        }
-                    });
-                }
-            });
-            /*******************************************************************************************/
-            //删除收银员，因为表格是自动生成的，所以只能用on函数，click事件无效
-            $("#tbody").on("click", "a[name='delete']", function () {
-                $("#deleteId").val($(this).parents("tr").find(".Id").text());
-                $("#deleteTip").html("Do you want to delete this record ( Number : " + $(this).parents("tr").find(".Id").text() + " ) ？");
-                $("#myModal3").modal({moveable: true});
-            });
-            //删除收银员 提交
-            $("#submit4").click(function () {
-                $.ajax({
-                    type: "POST",
-                    url: "ActionPart1_deleteOneCashier.action",
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data: {
-                        "value1": $("#deleteId").val()
-                    },
-                    dataType: "json",
-                    cache: false,
-                    success: function (data) {
-                        //登录超时，请重新登录
-                        if (data.jsonObject == "-3") {
-                            new $.zui.Messager(loginTimeout, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                            setTimeout(function () {
-                                top.location.href = "../login.html";//重定向
-                            }, 2000);
-                        }
-                        //服务器出错
-                        else if (data.jsonObject == "-1") {
-                            new $.zui.Messager(serverError, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        }
-                        //正确传输过来数据
-                        else {
-                            if (data.jsonObject == "0") {
-                                new $.zui.Messager('Submission failure. Please re-enter it !', {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                            } else if (data.jsonObject == "1") {
-                                new $.zui.Messager('Submit successfully !', {
-                                    type: 'success',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                                $("#myModal3").modal('hide');   //显示对话框
-                                findAllCashiers();
-                            }
-                        }
-                    },
-                    error: function (jqXHR) {
-                        new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                            type: 'danger',
-                            placement: 'top' // 定义显示位置
-                        }).show();
-                    }
-                });
-            });
-            /*******************************************************************************************/
-
-            //数据补全函数，如1，保留为001，num为待操作数，length为最终保留的长度
-            function buquan(num, length) {
-                var numstr = num.toString();
-                var l = numstr.length;
-                if (numstr.length >= length) {
-                    return numstr;
-                }
-                for (var i = 0; i < length - l; i++) {
-                    numstr = "0" + numstr;
-                }
-                return numstr;
-            }
-
-
-            $('#myDataGrid').datagrid({
-                dataSource: {
-                    cols: [
-                        // {name: '', label: '', width: 80, checkbox: true, sort: false},
-                        {name: 'time', label: '时间', width: 0.1, sort: true},
-                        {name: 'college', label: '学院', width: 0.1, sort: true},
-                        {name: 'type', label: '类型', width: 0.1, sort: true},
-                        {name: 'theme', label: '会议主题', width: 0.2, sort: true},
-                        {name: 'state', label: '状态', width: 0.2, sort: true},
-                        {name: 'operation', label: '操作', width: 0.3, sort: false}
-                    ],
-                    array: [
+                //第一个实例
+                table.render({
+                    elem: '#demo',
+                    height: 460,
+                    // , url: '' //数据接口
+                    page: true, //开启分页
+                    toolbar: '#bar1',//开启表格头部工具栏区域
+                    // toolbar: 'default',//开启表格头部工具栏区域
+                    skin: 'line', //行边框风格
+                    even: true,//开启隔行背景
+                    // size: 'lg', //小尺寸的表格
+                    cols: [[ //表头
+                        {fixed: 'left', width: '5%', type: "checkbox"},
+                        {field: 'id', title: 'ID', width: '5%', sort: true, align: 'center'},
+                        {field: 'username', title: '用户名', width: '5%', align: 'center'},
+                        {field: 'sex', title: '性别', width: '10%', sort: true, align: 'center'},
+                        {field: 'city', title: '城市', width: '10%', align: 'center'},
+                        {field: 'sign', title: '签名', width: '10%', align: 'center'},
+                        {field: 'experience', title: '积分', width: '10%', sort: true, align: 'center'},
+                        {field: 'score', title: '评分', width: '10%', sort: true, align: 'center'},
+                        {field: 'classify', title: '职业', width: '10%', align: 'center'},
+                        {field: 'wealth', title: '财富', width: '10%', sort: true, align: 'center'},
+                        {field: 'wealth', title: '财富', width: '15%', sort: true, align: 'center', toolbar: '#bar2'}
+                    ]],
+                    data: [
                         {
-                            time: '2018-12-21',
-                            college: '计算机学院',
-                            type: '党政联席会议',
-                            theme: '学院学科建设研讨会',
-                            state: '<span class="label label-badge label-success" style="font-size: 14px">已完结</span>',
-                            operation: '<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="查看详情"><i class="icon icon-resize"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a name="delete" href="#" data-toggle="tooltip" data-tip-class="tooltip-danger" title="delete" style="color: #ea644a"><i class="icon icon-trash"></i></a>'
-                        },
-                        {time: '2018-12-22', college: '电信学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-23', college: '能动学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-24', college: '经管学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-25', college: '船海学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-26', college: '环化学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-27', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-29', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-30', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-                        {time: '2018-12-28', college: '计算机学院', type: '党政联席会议', theme: '学院学科建设研讨会', state: '已完结'},
-
+                            "id": 10001,
+                            "username": "user-1",
+                            "sex": "男",
+                            "city": "城市-1",
+                            "sign": "签名-1",
+                            "experience": 884,
+                            "logins": 58,
+                            "wealth": 64928690,
+                            "classify": "词人",
+                            "score": 27
+                        }, {
+                            "id": 10002,
+                            "username": "user-2",
+                            "sex": "女",
+                            "city": "城市-2",
+                            "sign": "签名-2",
+                            "experience": 650,
+                            "logins": 77,
+                            "wealth": 6298078,
+                            "classify": "酱油",
+                            "score": 31
+                        }, {
+                            "id": 10003,
+                            "username": "user-3",
+                            "sex": "女",
+                            "city": "城市-3",
+                            "sign": "签名-3",
+                            "experience": 362,
+                            "logins": 157,
+                            "wealth": 37117017,
+                            "classify": "诗人",
+                            "score": 68
+                        }, {
+                            "id": 10004,
+                            "username": "user-4",
+                            "sex": "男",
+                            "city": "城市-4",
+                            "sign": "签名-4",
+                            "experience": 807,
+                            "logins": 51,
+                            "wealth": 76263262,
+                            "classify": "作家",
+                            "score": 6
+                        }, {
+                            "id": 10005,
+                            "username": "user-5",
+                            "sex": "女",
+                            "city": "城市-5",
+                            "sign": "签名-5",
+                            "experience": 173,
+                            "logins": 68,
+                            "wealth": 60344147,
+                            "classify": "作家",
+                            "score": 87
+                        }, {
+                            "id": 10006,
+                            "username": "user-6",
+                            "sex": "女",
+                            "city": "城市-6",
+                            "sign": "签名-6",
+                            "experience": 982,
+                            "logins": 37,
+                            "wealth": 57768166,
+                            "classify": "作家",
+                            "score": 34
+                        }, {
+                            "id": 10007,
+                            "username": "user-7",
+                            "sex": "男",
+                            "city": "城市-7",
+                            "sign": "签名-7",
+                            "experience": 727,
+                            "logins": 150,
+                            "wealth": 82030578,
+                            "classify": "作家",
+                            "score": 28
+                        }, {
+                            "id": 10008,
+                            "username": "user-8",
+                            "sex": "男",
+                            "city": "城市-8",
+                            "sign": "签名-8",
+                            "experience": 951,
+                            "logins": 133,
+                            "wealth": 16503371,
+                            "classify": "词人",
+                            "score": 14
+                        }, {
+                            "id": 10009,
+                            "username": "user-9",
+                            "sex": "女",
+                            "city": "城市-9",
+                            "sign": "签名-9",
+                            "experience": 484,
+                            "logins": 25,
+                            "wealth": 86801934,
+                            "classify": "词人",
+                            "score": 75
+                        }, {
+                            "id": 10010,
+                            "username": "user-10",
+                            "sex": "女",
+                            "city": "城市-10",
+                            "sign": "签名-10",
+                            "experience": 1016,
+                            "logins": 182,
+                            "wealth": 71294671,
+                            "classify": "诗人",
+                            "score": 34
+                        }, {
+                            "id": 10011,
+                            "username": "user-11",
+                            "sex": "女",
+                            "city": "城市-11",
+                            "sign": "签名-11",
+                            "experience": 492,
+                            "logins": 107,
+                            "wealth": 8062783,
+                            "classify": "诗人",
+                            "score": 6
+                        }, {
+                            "id": 10012,
+                            "username": "user-12",
+                            "sex": "女",
+                            "city": "城市-12",
+                            "sign": "签名-12",
+                            "experience": 106,
+                            "logins": 176,
+                            "wealth": 42622704,
+                            "classify": "词人",
+                            "score": 54
+                        }, {
+                            "id": 10013,
+                            "username": "user-13",
+                            "sex": "男",
+                            "city": "城市-13",
+                            "sign": "签名-13",
+                            "experience": 1047,
+                            "logins": 94,
+                            "wealth": 59508583,
+                            "classify": "诗人",
+                            "score": 63
+                        }, {
+                            "id": 10014,
+                            "username": "user-14",
+                            "sex": "男",
+                            "city": "城市-14",
+                            "sign": "签名-14",
+                            "experience": 873,
+                            "logins": 116,
+                            "wealth": 72549912,
+                            "classify": "词人",
+                            "score": 8
+                        }, {
+                            "id": 10015,
+                            "username": "user-15",
+                            "sex": "女",
+                            "city": "城市-15",
+                            "sign": "签名-15",
+                            "experience": 1068,
+                            "logins": 27,
+                            "wealth": 52737025,
+                            "classify": "作家",
+                            "score": 28
+                        }, {
+                            "id": 10016,
+                            "username": "user-16",
+                            "sex": "女",
+                            "city": "城市-16",
+                            "sign": "签名-16",
+                            "experience": 862,
+                            "logins": 168,
+                            "wealth": 37069775,
+                            "classify": "酱油",
+                            "score": 86
+                        }, {
+                            "id": 10017,
+                            "username": "user-17",
+                            "sex": "女",
+                            "city": "城市-17",
+                            "sign": "签名-17",
+                            "experience": 1060,
+                            "logins": 187,
+                            "wealth": 66099525,
+                            "classify": "作家",
+                            "score": 69
+                        }, {
+                            "id": 10018,
+                            "username": "user-18",
+                            "sex": "女",
+                            "city": "城市-18",
+                            "sign": "签名-18",
+                            "experience": 866,
+                            "logins": 88,
+                            "wealth": 81722326,
+                            "classify": "词人",
+                            "score": 74
+                        }, {
+                            "id": 10019,
+                            "username": "user-19",
+                            "sex": "女",
+                            "city": "城市-19",
+                            "sign": "签名-19",
+                            "experience": 682,
+                            "logins": 106,
+                            "wealth": 68647362,
+                            "classify": "词人",
+                            "score": 51
+                        }, {
+                            "id": 10020,
+                            "username": "user-20",
+                            "sex": "男",
+                            "city": "城市-20",
+                            "sign": "签名-20",
+                            "experience": 770,
+                            "logins": 24,
+                            "wealth": 92420248,
+                            "classify": "诗人",
+                            "score": 87
+                        }, {
+                            "id": 10021,
+                            "username": "user-21",
+                            "sex": "男",
+                            "city": "城市-21",
+                            "sign": "签名-21",
+                            "experience": 184,
+                            "logins": 131,
+                            "wealth": 71566045,
+                            "classify": "词人",
+                            "score": 99
+                        }, {
+                            "id": 10022,
+                            "username": "user-22",
+                            "sex": "男",
+                            "city": "城市-22",
+                            "sign": "签名-22",
+                            "experience": 739,
+                            "logins": 152,
+                            "wealth": 60907929,
+                            "classify": "作家",
+                            "score": 18
+                        }, {
+                            "id": 10023,
+                            "username": "user-23",
+                            "sex": "女",
+                            "city": "城市-23",
+                            "sign": "签名-23",
+                            "experience": 127,
+                            "logins": 82,
+                            "wealth": 14765943,
+                            "classify": "作家",
+                            "score": 30
+                        }, {
+                            "id": 10024,
+                            "username": "user-24",
+                            "sex": "女",
+                            "city": "城市-24",
+                            "sign": "签名-24",
+                            "experience": 212,
+                            "logins": 133,
+                            "wealth": 59011052,
+                            "classify": "词人",
+                            "score": 76
+                        }, {
+                            "id": 10025,
+                            "username": "user-25",
+                            "sex": "女",
+                            "city": "城市-25",
+                            "sign": "签名-25",
+                            "experience": 938,
+                            "logins": 182,
+                            "wealth": 91183097,
+                            "classify": "作家",
+                            "score": 69
+                        }, {
+                            "id": 10026,
+                            "username": "user-26",
+                            "sex": "男",
+                            "city": "城市-26",
+                            "sign": "签名-26",
+                            "experience": 978,
+                            "logins": 7,
+                            "wealth": 48008413,
+                            "classify": "作家",
+                            "score": 65
+                        }, {
+                            "id": 10027,
+                            "username": "user-27",
+                            "sex": "女",
+                            "city": "城市-27",
+                            "sign": "签名-27",
+                            "experience": 371,
+                            "logins": 44,
+                            "wealth": 64419691,
+                            "classify": "诗人",
+                            "score": 60
+                        }, {
+                            "id": 10028,
+                            "username": "user-28",
+                            "sex": "女",
+                            "city": "城市-28",
+                            "sign": "签名-28",
+                            "experience": 977,
+                            "logins": 21,
+                            "wealth": 75935022,
+                            "classify": "作家",
+                            "score": 37
+                        }, {
+                            "id": 10029,
+                            "username": "user-29",
+                            "sex": "男",
+                            "city": "城市-29",
+                            "sign": "签名-29",
+                            "experience": 647,
+                            "logins": 107,
+                            "wealth": 97450636,
+                            "classify": "酱油",
+                            "score": 27
+                        }
                     ]
-                },
-                // ... 其他初始化选项
-                states: {
-                    pager: {page: 1, recPerPage: 10}
-                },
-                checkable: true,
-                // selectable : true,
-                checkByClickRow: false,
-                // showHeader:false,
-                showRowIndex: true,
-                // rowIndexWidth: 100,
-                sortable: true,
-                configs: {
-                    C1: {className: 'text-center'},
-                    C2: {className: 'text-center'},
-                    C3: {className: 'text-center'},
-                    C4: {className: 'text-center'},
-                    C5: {
-                        className: 'text-center',
-                        html: true,
-                    },
-                    C6: {
-                        className: 'text-center',
-                        html: true,
-                    },
-                    C7: {
-                        className: 'text-center',
-                        html: true,
-                    },
-                }
+                });
+                //监听头工具栏事件
+                table.on('toolbar(table1)', function(obj){
+                    var checkStatus = table.checkStatus(obj.config.id),data = checkStatus.data; //获取选中的数据
+                    switch(obj.event){
+                        case 'add':
+                            layer.msg('添加');
+                            break;
+                        case 'update':
+                            if(data.length === 0){
+                                layer.msg('请选择一行');
+                            } else if(data.length > 1){
+                                layer.msg('只能同时编辑一个');
+                            } else {
+                                layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
+                            }
+                            break;
+                        case 'delete':
+                            if(data.length === 0){
+                                layer.msg('请选择一行');
+                            } else {
+                                layer.msg('删除');
+                            }
+                            break;
+                    };
+                });
+                //监听行工具事件
+                table.on('tool(table1)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    var data = obj.data; //获得当前行数据
+                    var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                    var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+                    if (layEvent === 'detail') { //查看
+                        //do somehing
+                    } else if (layEvent === 'del') { //删除
+                        layer.confirm('真的删除行么', function (index) {
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            //向服务端发送删除指令
+                        });
+                    } else if (layEvent === 'edit') { //编辑
+                        //do something
+
+                        //同步更新缓存对应的值
+                        obj.update({
+                            username: '123'
+                            , title: 'xxx'
+                        });
+                    }else if (layEvent === 'delete') { //删除
+                        layer.confirm('真的删除行么', function (index) {
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            //向服务端发送删除指令
+                        });
+                    }
+                });
+
             });
-            $('[data-toggle="tooltip"]').tooltip();
+
         });
     </script>
     <style>
@@ -730,198 +442,22 @@
     </style>
 </head>
 <body>
-<!--收银员-->
-<div>
-    <div style="margin-top: 10px;width: 100%;height: 40px;">
-        <span class="label label-badge label-primary label-define"
-              style="float: left; margin-left: 20px;margin-top: 10px">全部会议</span>
-        <!--<button id="submit2" class="btn btn-primary" type="button"-->
-        <!--style="float: right; margin-right: 20px"><i class="icon icon-refresh"></i> Refresh-->
-        <!--</button>-->
-        <!--<button id="submit1" class="btn btn-primary" type="button"-->
-        <!--style="float: right; margin-right: 20px"><i class="icon icon-plus"></i> Add-->
-        <!--</button>-->
-    </div>
-    <div style="background-color: white;" class="table-responsive">
-        <!--height: 400px;overflow: scroll; overflow-x: hidden-->
-        <table id="table2_1" class="table table-striped table-hover table-bordered">
-            <thead id="thead">
-            </thead>
-            <tbody id="tbody">
-            </tbody>
-        </table>
-    </div>
-    <div id="myDataGrid" class="datagrid datagrid-borderless datagrid-striped ">
-        <div class="datagrid-container"></div>
-        <div class="pager"></div>
-    </div>
-</div>
-<!--基础对话框-->
-<div class="modal fade" id="myModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title">Messages</h4>
-            </div>
-            <div class="modal-body">
-                <p id="modal-content" style="font-weight: 800"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--对话框 新增-->
-<div class="modal fade" id="myModal1">
-    <div class="modal-dialog modal-moveable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title">Add A New Cashier</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-3">Number</label>
-                        <label id="number" class="col-sm-6" style="text-align: center"></label>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Code</label>
-                        <div class="col-sm-6">
-                            <input id="code" type="tel" class="form-control" maxlength="3"
-                                   placeholder="fixed 3 digits number" style="ime-mode: disabled"
-                                   onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
-                        </div>
-                        <strong>*</strong>
-                        <label style="padding-left: 10px"><i id="code_flag1" class="icon icon-check"
-                                                             style="color: green"></i> <i id="code_flag2"
-                                                                                          class="icon icon-times"
-                                                                                          style="color: red"></i></label>
-                        <label id="code_info" hidden="hidden"></label>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Name</label>
-                        <div class="col-sm-6">
-                            <input id="name" type="text" class="form-control" maxlength="15"
-                                   placeholder="1-15 characters" style="ime-mode: disabled"
-                                   onkeyup="this.value=this.value.replace(/[^\d\s()a-zA-Z+-]/g,'')">
-                        </div>
-                        <strong>*</strong>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Password</label>
-                        <div class="col-sm-6">
-                            <input id="password" type="password" class="form-control" maxlength="6"
-                                   placeholder="fixed 6 digits number" style="ime-mode: disabled"
-                                   onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
-                            <!--onkeypress="return (event.keyCode >= 48 && event.keyCode <= 57)">-->
-                        </div>
-                        <strong>*</strong>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Re-Password</label>
-                        <div class="col-sm-6">
-                            <input id="re_password" type="password" class="form-control" maxlength="6"
-                                   placeholder="fixed 6 digits number" style="ime-mode: disabled"
-                                   onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
-                        </div>
-                        <strong>*</strong>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
-                </button>
-                <button id="submit1_1" class="btn btn-primary" type="button">
-                    Submit
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--对话框 修改-->
-<div class="modal fade" id="myModal2">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title">Modify A Cashier</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-3">Number</label>
-                        <label id="number2" class="col-sm-6" style="text-align: center"></label>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Code</label>
-                        <label id="code2" class="col-sm-6" style="text-align: center"></label>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Name</label>
-                        <div class="col-sm-6">
-                            <input id="name2" type="text" class="form-control" maxlength="15"
-                                   placeholder="1-15 characters" style="ime-mode: disabled"
-                                   onkeyup="this.value=this.value.replace(/[^\d\s()a-zA-Z+-]/g,'')">
-                        </div>
-                        <strong>*</strong>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Password</label>
-                        <div class="col-sm-6">
-                            <input id="password2" type="password" class="form-control" maxlength="6"
-                                   placeholder="fixed 6 digits number" style="ime-mode: disabled"
-                                   onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
-                        </div>
-                        <strong>*</strong>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Re-Password</label>
-                        <div class="col-sm-6">
-                            <input id="re_password2" type="password" class="form-control" maxlength="6"
-                                   placeholder="fixed 6 digits number" style="ime-mode: disabled"
-                                   onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
-                        </div>
-                        <strong>*</strong>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
-                </button>
-                <button id="submit3" class="btn btn-primary" type="button">
-                    Submit
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--对话框 删除-->
-<div class="modal fade" id="myModal3">
-    <div class="modal-dialog modal-moveable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title">Delete Or Not</h4>
-            </div>
-            <div class="modal-body">
-                <div style="display: none">
-                    <input id="deleteId">
-                </div>
-                <p id="deleteTip" style="font-weight: 800"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button id="submit4" type="button" class="btn btn-primary">Confirm</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div>-->
+<!--<div style="margin-top: 10px;width: 100%;height: 40px;">-->
+<!--<span class="label label-badge label-primary label-define"-->
+<!--style="float: left; margin-left: 20px;margin-top: 10px">全部会议</span>-->
+<!--</div>-->
+
+<table id="demo" lay-filter="table1"></table>
+<script type="text/html" id="bar1">
+    <div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>
+    <!--<a lay-event="del"><i class="layui-icon layui-icon-delete"></i></a>-->
+</script>
+<script type="text/html" id="bar2">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!--</div>-->
 </body>
 </html>
