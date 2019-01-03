@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
+    <link rel="stylesheet" href="../plugs/layui/css/layui.css">
+    <script src="../plugs/javascript/jquery-1.11.3.min.js"></script>
+    <!--<script src="../plugs/javascript/jquery.cookie.js"></script>-->
+    <script src="../plugs/layui/layui.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            layui.use(['form', 'layedit', 'laydate'], function () {
+                var form = layui.form, layer = layui.layer, layedit = layui.layedit, laydate = layui.laydate;
+
+                //日期
+                laydate.render({
+                    elem: '#date', type: 'datetime'
+                });
+
+                //创建一个编辑器
+                // var editIndex = layedit.build('LAY_demo_editor');
+
+                //富文本编辑器
+                layedit.build('hyzw', {
+                    height: 180 //设置编辑器高度
+                }); //建立编辑器
+                //自定义验证规则
+                form.verify({
+                    title: function (value) {
+                        if (value.length < 5) {
+                            return '标题至少得5个字符啊';
+                        }
+                    }
+                    , pass: [
+                        /^[\S]{6,12}$/
+                        , '密码必须6到12位，且不能出现空格'
+                    ]
+                    , content: function (value) {
+                        layedit.sync(editIndex);
+                    }
+                });
+
+                //监听指定开关
+                form.on('switch(switchTest)', function (data) {
+                    layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                        offset: '6px'
+                    });
+                    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+                });
+
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    layer.alert(JSON.stringify(data.field), {
+                        title: '最终的提交信息'
+                    })
+                    return false;
+                });
+
+                //表单初始赋值
+                form.val('example', {
+                    "username": "贤心" // "name": "value"
+                    , "password": "123456"
+                    , "interest": 1
+                    , "like[write]": true //复选框选中状态
+                    , "close": true //开关状态
+                    , "sex": "女"
+                    , "desc": "我爱 layui"
+                })
+
+            });
+        });
+    </script>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial;
+            font-size: 14px;
+            /*min-height: 500px;*/
+            /*min-width: 500px;*/
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div style="margin: 15px 15px" class="layui-card layui-anim layui-anim-upbit">
+    <div class="layui-card-header">新增会议</div>
+    <div class="layui-card-body">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">会议名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required lay-verify="required" placeholder="请输入会议名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">与会人员</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required lay-verify="required" placeholder="请输入与会人员" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">会议时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="date" id="date" lay-verify="required" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">会议地点</label>
+                    <!--style="width: 250px"-->
+                    <div class=" layui-input-inline">
+                        <input type="text" name="title" required lay-verify="required" placeholder="请输入会议地点" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">承办单位</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title" required lay-verify="required" placeholder="请输入承办单位" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">会议级别</label>
+                    <div class="layui-input-inline">
+                        <select name="quiz1" lay-verify="required" lay-search>
+                            <option value="">直接选择或搜索选择</option>
+                            <option value="0">校级</option>
+                            <option value="1">院级</option>
+                            <option value="2">系部</option>
+                            <option value="3">支部</option>
+                            <option value="4">其他</option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label">会议分类</label>
+                    <div class="layui-input-inline">
+                        <select name="quiz2" lay-verify="required" lay-search>
+                            <option value="">直接选择或搜索选择</option>
+                            <option value="1">党委会</option>
+                            <option value="2">党委中心组学习会</option>
+                            <option value="3">办公会</option>
+                            <option value="4">民主生活会</option>
+                            <option value="5">专题会</option>
+                            <option value="6">党政联席会</option>
+                            <option value="7">系部会议</option>
+                            <option value="8">党支部会议</option>
+                            <option value="9">其他</option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label">会议属性</label>
+                    <div class="layui-input-inline">
+                        <select name="quiz3" lay-verify="required" lay-search>
+                            <option value="">直接选择或搜索选择</option>
+                            <option value="1">工作布置</option>
+                            <option value="2">工作决策</option>
+                            <option value="3">业务学习</option>
+                            <option value="4">政治学习</option>
+                            <option value="5">专项活动</option>
+                            <option value="6">其他</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">会议正文</label>
+                <div class="layui-input-block">
+                    <textarea id="hyzw" placeholder="请输入内容"></textarea>
+                </div>
+            </div>
+            <!--<div class="layui-form-item layui-form-text">-->
+                <!--<label class="layui-form-label">备注</label>-->
+                <!--<div class="layui-input-block">-->
+                    <!--<textarea name="beizhu" placeholder="请输入内容" class="layui-textarea"></textarea>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">会议状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="hyzt" value="即将开始" title="即将开始" checked>
+                    <input type="radio" name="hyzt" value="进行中" title="进行中">
+                    <input type="radio" name="hyzt" value="会议结束" title="会议结束">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">记录状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="jlzt" value="待完善" title="待完善" checked>
+                    <input type="radio" name="jlzt" value="待提交" title="待提交">
+                    <input type="radio" name="jlzt" value="待审核" title="待审核">
+                    <input type="radio" name="jlzt" value="已驳回待修改" title="已驳回待修改">
+                    <input type="radio" name="jlzt" value="已审核" title="已审核">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">记录员</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="date" id="jly" lay-verify="required" placeholder="请输入记录员" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">审核员</label>
+                    <div class=" layui-input-inline">
+                        <div class="layui-input-inline">
+                            <select name="quiz4" lay-verify="required" lay-search>
+                                <option value="">请指定会议审核员</option>
+                                <option value="1">党委书记（童）</option>
+                                <option value="2">院长（何）</option>
+                                <option value="3">党委副书记（王）</option>
+                                <option value="4">副院长（李）</option>
+                                <option value="5">副院长（赵）</option>
+                                <option value="6">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -13,22 +13,22 @@
             /**
              *获取项目名
              */
-            //https://admin.alilinet.com/rbac/user/login
-            // 获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+                //https://admin.alilinet.com/rbac/user/login
+                // 获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
             var pathName = window.document.location.pathname;
             //获取带"/"的项目名，如：/uimcardprj
             var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
             /*******************************************************************************************/
             //登录
             $("#button_login").click(function () {
+                location.href = "index.html";
                 if ($("#username").val() == "" && $("#password").val() == "") {
                     layer.msg('用户名和密码不可为空');
                 } else if ($("#username").val() == "") {
                     layer.msg('用户名不可为空');
                 } else if ($("#password").val() == "") {
                     layer.msg('密码不可为空');
-                }
-                else {
+                } else {
                     $("#button_login").val("登录...");
                     $.ajax({
                         type: "POST",
