@@ -69,32 +69,7 @@
 
             // loginsuccess();
 
-            //注销
-            $("#loginout").click(function () {
-                if ($.cookie("username") != null) {
-                    $.ajax({
-                        type: "GET",
-                        url: projectName + "/admin/loginOut",
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            $.cookie("username", null, {expires: -1});//删除cookie信息
-                            location.href = "login.html";
-                        },
-                        error: function (jqXHR) {
-                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                            location.href = "login.html";
-                        }
-                    });
 
-                } else {
-                    location.href = "login.html";
-                }
-            });
         })
     </script>
     <style>

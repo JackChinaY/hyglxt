@@ -19,7 +19,7 @@ import java.util.Map;
 //@RequestMapping("/admin")
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/user")
 public class ViewController {
 
 //    private Logger logger = Logger.getLogger(ViewController.class);

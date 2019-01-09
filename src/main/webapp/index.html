@@ -5,15 +5,56 @@
     <title>党政会议云记录管理平台</title>
     <link rel="shortcut icon" type="image/x-icon" href="plugs/image/favicon.ico"/>
     <link rel="stylesheet" href="plugs/layui/css/layui.css">
-    <script src="plugs/javascript/jquery-1.11.3.min.js"></script>
-    <script src="plugs/javascript/jquery.cookie.js"></script>
+    <script src="plugs/jquery/jquery-1.11.3.min.js"></script>
+    <script src="plugs/jquery/jquery.cookie.js"></script>
     <script src="plugs/layui/layui.js"></script>
+    <script src="javascript/common.js"></script>
     <script type="text/javascript">
         $(function () {
             layui.use('element', function () {
                 var element = layui.element;
             });
+
+            //成功登陆后加载用户信息
+            function loginsuccess() {
+                // console.log($.cookie("username"));
+                if ($.cookie("username") != null) {
+                    $("#successlogin").html('  ' + $.cookie("username") + '  ');
+                } else {
+                    location.href = "login";
+                }
+            }
+
+            loginsuccess();
+
+            //注销
+            $("#loginout").click(function () {
+                if ($.cookie("username") != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: projectName + "/loginOut",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            $.cookie("username", null, {expires: -1});//删除cookie信息
+                            location.href = "login";
+                        },
+                        error: function (jqXHR) {
+                            location.href = "login";
+                        }
+                    });
+
+                } else {
+                    location.href = "login";
+                }
+            });
         })
+
+        function loginOut() {
+            $.cookie("username", null, {expires: -1});//删除cookie信息
+            top.location.href = projectName + "/loginOut";
+        }
     </script>
     <style>
         html, body {
@@ -158,7 +199,7 @@
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="">注销</a></li>
+            <li class="layui-nav-item"><a href="javascript:void(0);" onclick="loginOut()">注销</a></li>
         </ul>
     </div>
     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->

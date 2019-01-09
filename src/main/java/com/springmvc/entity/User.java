@@ -15,13 +15,13 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**用户ID*/
+    //用户ID
     private String id;
-    /**用户名*/
+    //用户名
     private String username;
-    /**密码*/
+    //密码
     private String password;
-    /**姓名*/
+    //姓名
     private String sex;
 
     public User() {
