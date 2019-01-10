@@ -1,38 +1,31 @@
 package com.springmvc.entity;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
-import java.io.Serializable;
-
 /**
- * Created by Vitelon on 2017-03-30
- * 用户实体类.
+ * 用户实体类
  */
-@Component(value = "user")
-public class User implements Serializable {
+//@Component(value = "user")
+public class User {
 
-    private static final long serialVersionUID = 1L;
+//    private static final long serialVersionUID = 1L;
 
-    //用户ID
+    //用户ID 32位UUID
     private String id;
     //用户名
     private String username;
     //密码
     private String password;
     //姓名
+    private String name;
+    //性别
     private String sex;
-
-    public User() {
-    }
-
-    public User(String id, String username, String password, String sex) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.sex = sex;
-    }
+    //归属学院
+    private String xueyuan;
+    //职务
+    private String zhiwu;
+    //职称
+    private String zhicheng;
+    //分管领域
+    private String fgly;
 
     public String getId() {
         return id;
@@ -58,21 +51,51 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getSex() {
         return sex;
     }
 
-    public void setSex(String name) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", sex='" + sex + '\'' +
-                '}';
+    public String getXueyuan() {
+        return xueyuan;
+    }
+
+    public void setXueyuan(String xueyuan) {
+        this.xueyuan = xueyuan;
+    }
+
+    public String getZhiwu() {
+        return zhiwu;
+    }
+
+    public void setZhiwu(String zhiwu) {
+        this.zhiwu = zhiwu;
+    }
+
+    public String getZhicheng() {
+        return zhicheng;
+    }
+
+    public void setZhicheng(String zhicheng) {
+        this.zhicheng = zhicheng;
+    }
+
+    public String getFgly() {
+        return fgly;
+    }
+
+    public void setFgly(String fgly) {
+        this.fgly = fgly;
     }
 }

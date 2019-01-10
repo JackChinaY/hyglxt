@@ -34,6 +34,10 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
      * @param handler  表示的是被拦截的目标对象
      * @return
      * @throws IOException
+     * http://localhost:8080/Demo2/loginIn
+     * request.getContextPath():/Demo2
+     * request.getRequestURI():/Demo2/loginIn
+     * request.getServletPath():/loginIn
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {

@@ -52,9 +52,7 @@ public class SystemController {
     @RequestMapping(value = "/loginIn", method = RequestMethod.POST)
     @ResponseBody//处理 AJAX请求，返回响应的内容
     public Map<String, String> loginIn(@RequestBody User user, HttpSession session) {
-        System.out.println("已进入controller方法。。。。");
-        System.out.println("username :" + user.getUsername());
-        System.out.println("password :" + user.getPassword());
+        System.out.println("用户名 :" + user.getUsername() + "密码 :" + user.getPassword());
 //        Map result = hqService.login(username, password);
 //        System.out.println("查询结果1 is:" + result.size());
 //        System.out.println("查询结果2 is:" + result.get("COUNTS"));

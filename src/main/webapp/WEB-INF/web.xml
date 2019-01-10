@@ -106,14 +106,48 @@
         <load-on-startup>1</load-on-startup><!--当值为正数或零时：Servlet容器先加载数值小的servlet，再依次加载其他数值大的servlet.-->
         <async-supported>true</async-supported><!--设置是否启用异步支持-->
     </servlet>
-    <!-- 拦截规则设置 -->
+    <!-- 5.1拦截规则设置 -->
     <servlet-mapping>
         <servlet-name>SpringMVC</servlet-name>
         <!-- 此处可以配置成*.do  /  ，对应struts的后缀习惯 -->
         <url-pattern>/</url-pattern><!--以/作为url的话就会拦截所有的请求，包括静态页面的请求-->
         <!--<url-pattern>*.do</url-pattern>&lt;!&ndash;只会拦截*.do的请求&ndash;&gt;-->
     </servlet-mapping>
+    <!-- 5.Spring MVC 核心控制器 DispatcherServlet 配置结束 -->
 
+    <!-- 6.会话超时配置，单位分钟 -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- 7.禁止用户访问一些目录或目录中的文件 -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Forbidden</web-resource-name>
+            <url-pattern>/file/*</url-pattern>
+            <!--<url-pattern>index.html</url-pattern>-->
+        </web-resource-collection>
+        <auth-constraint/>
+    </security-constraint>
+
+    <!-- 8.欢迎页面配置 -->
+    <welcome-file-list>
+        <welcome-file>login.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- 9.当系统发生500、404等错误时返回到登录页面 -->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.NullPointerException</exception-type>
+        <location>/</location>
+    </error-page>
 
     <!-- 防止Spring内存溢出监听器  -->
     <!--<listener>-->
@@ -142,44 +176,6 @@
     <!--</listener>-->
 
 
-    <!--<servlet-mapping>-->
-    <!--<servlet-name>SpringMVC</servlet-name>-->
-    <!--<url-pattern>/login</url-pattern>-->
-    <!--</servlet-mapping>-->
-    <!-- Spring MVC 核心控制器 DispatcherServlet 配置结束 -->
 
 
-    <!-- 会话超时配置，单位分钟 -->
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
-
-    <!--禁止用户访问一些目录或目录中的文件-->
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Forbidden</web-resource-name>
-            <url-pattern>/file/*</url-pattern>
-            <!--<url-pattern>index.html</url-pattern>-->
-        </web-resource-collection>
-        <auth-constraint/>
-    </security-constraint>
-
-    <!-- 欢迎页面配置  -->
-    <welcome-file-list>
-        <welcome-file>login.html</welcome-file>
-    </welcome-file-list>
-
-    <!--当系统发生500、404等错误时的页面-->
-    <error-page>
-        <error-code>500</error-code>
-        <location>/</location>
-    </error-page>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/</location>
-    </error-page>
-    <error-page>
-        <exception-type>java.lang.NullPointerException</exception-type>
-        <location>/</location>
-    </error-page>
 </web-app>
