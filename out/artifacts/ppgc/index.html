@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>党政会议云记录管理平台</title>
+    <link rel="shortcut icon" type="image/x-icon" href="plugs/image/favicon.ico"/>
+    <link rel="stylesheet" href="plugs/layui/css/layui.css">
+    <script src="plugs/jquery/jquery-1.11.3.min.js"></script>
+    <script src="plugs/jquery/jquery.cookie.js"></script>
+    <script src="plugs/layui/layui.js"></script>
+    <script src="js/common.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            layui.use('element', function () {
+                var element = layui.element;
+            });
+
+            //成功登陆后加载用户信息
+            function loginsuccess() {
+                // console.log($.cookie("username"));
+                if ($.cookie("username") != null) {
+                    $("#successlogin").html('  ' + $.cookie("username") + '  ');
+                } else {
+                    location.href = "login";
+                }
+            }
+
+            loginsuccess();
+
+            //注销
+            $("#loginout").click(function () {
+                if ($.cookie("username") != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: projectName + "/loginOut",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            $.cookie("username", null, {expires: -1});//删除cookie信息
+                            location.href = "login";
+                        },
+                        error: function (jqXHR) {
+                            location.href = "login";
+                        }
+                    });
+
+                } else {
+                    location.href = "login";
+                }
+            });
+        })
+
+        function loginOut() {
+            $.cookie("username", null, {expires: -1});//删除cookie信息
+            top.location.href = projectName + "/loginOut";
+        }
+    </script>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial;
+            font-size: 14px;
+            /*min-height: 500px;*/
+            /*min-width: 500px;*/
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            overflow-x: auto;
+        }
+
+        .title {
+            width: 100%;
+            /*保持在顶部悬浮*/
+            position: absolute;
+            /*background-color: #D3D3D3;*/
+            background: -webkit-gradient(linear, left 0, right 0, from(#3483ff), to(#2950e5)); /* Webkit: Safari 5.1+, Chrome 10+ 3483ff  2950e5*/
+            border-bottom: #ffffff 2px solid;
+        }
+
+        .title .title_context {
+            line-height: 50px;
+            font-size: 23px;
+            color: white;
+            margin-left: 3%;
+            font-weight: 900;
+            font-family: Arial;
+        }
+
+        .title .title_context a {
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .title .title_context a:link, a:visited {
+            /*color: #ffffff;*/
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .title .title_context a:hover, a:active {
+            /*color: #ffffff;*/
+            /*background-color: #4682B4;*/
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /*登录处*/
+        .login a:hover, a:active {
+            /*background-color: #4682B4;*/
+            /*text-decoration: none;*/
+            cursor: pointer;
+        }
+
+        .login {
+            margin-top: 5px;
+            float: right;
+            color: black;
+            font-size: 15px;
+        }
+
+        .login div {
+            margin-top: 0px;
+        }
+
+        h3 {
+            color: blue;
+        }
+
+        .center {
+            width: 100%;
+            height: 100%;
+            padding-top: 52px;
+            /*以下为控制位于此div中的模块垂直和水平居中*/
+            /*display: flex;*/
+            /*justify-content: center;*/
+            /*align-items: center;*/
+        }
+
+        .left {
+            float: left;
+            width: 15%;
+            height: 100%;
+            border-right: #ffffff 2px solid;
+        }
+
+        /*左侧选择区--结束*/
+
+        /*右侧--开始*/
+        .right {
+            float: right;
+            width: 85%;
+            height: 100%;
+            background-color: #F5F5F5;
+        }
+
+        .right .context select {
+            font-size: 16px;
+        }
+
+        .label-define {
+            font-size: 16px;
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 10px
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <div class="layui-header">
+        <div class="layui-logo">党政会议云记录管理平台</div>
+
+        <!--<ul class="layui-nav layui-layout-left">-->
+        <!--<li class="layui-nav-item"><a href="">控制台</a></li>-->
+        <!--<li class="layui-nav-item"><a href="">商品管理</a></li>-->
+        <!--<li class="layui-nav-item"><a href="">用户</a></li>-->
+        <!--<li class="layui-nav-item">-->
+        <!--<a href="javascript:;">其它系统</a>-->
+        <!--<dl class="layui-nav-child">-->
+        <!--<dd><a href="">邮件管理</a></dd>-->
+        <!--<dd><a href="">消息管理</a></dd>-->
+        <!--<dd><a href="">授权管理</a></dd>-->
+        <!--</dl>-->
+        <!--</li>-->
+        <!--</ul>-->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <!--<img src="http://t.cn/RCzsdCq" class="layui-nav-img">-->
+                    <!--<img src="http://t.cn/RCzsdCq" class="layui-nav-img">-->
+                    计算机学院记录员 张宇
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="javascript:void(0);" onclick="loginOut()">注销</a></li>
+        </ul>
+    </div>
+    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">会议管理</a>
+                    <dl class="layui-nav-child">
+                        <!--<dd><a href="javascript:;" lay-href="ybsy/all.html">全部</a></dd>-->
+                        <dd class="layui-this"><a href="yjly/all.html" target="body">全部</a></dd>
+                        <dd><a href="yjly/add.html" target="body">新增加</a></dd>
+                        <dd><a href="javascript:;">待完善<span class="layui-badge">6</span></a></dd>
+                        <dd><a href="javascript:;">审核中<span class="layui-badge">3</span></a></dd>
+                        <dd><a href="javascript:;">已完结</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">会议统计</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">数据统计</a></dd>
+                        <dd><a href="javascript:;">数据汇总</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <!--<div class="layui-body" style="bottom: 0;overflow: hidden">-->
+    <div class="layui-body" style="bottom: 0;overflow: hidden;background: #f0f0f0">
+        <!--<div style="padding: 15px;height: 100%;overflow: hidden">-->
+        <iframe name="body" width="100%" height="100%" frameborder="0" src="yjly/add.html" style="overflow: hidden">
+            <!--<iframe name="body" width="100%" height="100%" frameborder="0" src="ybsy/all.html" style="overflow: hidden">-->
+        </iframe>
+        <!--</div>-->
+    </div>
+</div>
+</body>
+</html>
