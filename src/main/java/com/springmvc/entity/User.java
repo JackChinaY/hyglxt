@@ -18,8 +18,8 @@ public class User {
     private String name;
     //性别
     private String sex;
-    //归属学院
-    private String xueyuan;
+    //归属单位学院
+    private String danwei;
     //职务
     private String zhiwu;
     //职称
@@ -67,12 +67,12 @@ public class User {
         this.sex = sex;
     }
 
-    public String getXueyuan() {
-        return xueyuan;
+    public String getDanwei() {
+        return danwei;
     }
 
-    public void setXueyuan(String xueyuan) {
-        this.xueyuan = xueyuan;
+    public void setDanwei(String danwei) {
+        this.danwei = danwei;
     }
 
     public String getZhiwu() {

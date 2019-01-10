@@ -12,7 +12,7 @@ public class Conference {
     //会议时间
     private Date time;
     //会议承办单位
-    private String xueyuan;
+    private String danwei;
     //会议类型
     private String type;
     //会议名称
@@ -36,12 +36,12 @@ public class Conference {
         this.time = time;
     }
 
-    public String getXueyuan() {
-        return xueyuan;
+    public String getDanwei() {
+        return danwei;
     }
 
-    public void setXueyuan(String xueyuan) {
-        this.xueyuan = xueyuan;
+    public void setDanwei(String danwei) {
+        this.danwei = danwei;
     }
 
     public String getType() {
