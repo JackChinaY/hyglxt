@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.springmvc.dao.YjlyDao">
+    <!--
+    实体类和数据库之间的字段映射
+　　1.id 必须唯一， 用于标示这个resultMap的唯一性，在使用resultMap的时候，就是通过id引用
+　　2.type 对应的返回类型，可以是javabean, 也可以是其它
+　　3.extends 继承其他resultMap标签
+    -->
+    <resultMap id="baseResultMap" type="com.springmvc.entity.Conference">
+        <!--
+        1.id 唯一性，注意啦，这个id用于标示这个javabean对象的唯一性， 不一定会是数据库的主键（不要把它理解为数据库对应表的主键）
+        2.property 实体类中属性名
+        3.column 对应数据库表的列名（这样，当javabean的属性与数据库对应表的列名不一致的时候，就能通过指定这个保持正常映射了）
+        4.jdbcType 表示数据库中该字段的类型
+　　     -->
+        <!--会议ID 32位UUID-->
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <!--会议名称-->
+        <result property="hymc" column="hymc" jdbcType="VARCHAR"/>
+        <!--与会人员-->
+        <result property="yhry" column="yhry" jdbcType="VARCHAR"/>
+        <!--开始时间-->
+        <result property="kssj" column="kssj" jdbcType="TIMESTAMP"/>
+        <!--结束时间-->
+        <result property="jssj" column="jssj" jdbcType="TIMESTAMP"/>
+        <!--会议地点-->
+        <result property="hydd" column="hydd" jdbcType="VARCHAR"/>
+        <!--承办单位-->
+        <result property="cbdw" column="cbdw" jdbcType="VARCHAR"/>
+        <!--会议级别-->
+        <result property="hyjb" column="hyjb" jdbcType="VARCHAR"/>
+        <!--会议分类-->
+        <result property="hyfl" column="hyfl" jdbcType="VARCHAR"/>
+        <!--会议属性-->
+        <result property="hysx" column="hysx" jdbcType="VARCHAR"/>
+        <!--会议正文-->
+        <result property="yhzw" column="yhzw" jdbcType="VARCHAR"/>
+        <!--图片路径-->
+        <result property="tplj" column="tplj" jdbcType="VARCHAR"/>
+        <!--文档路径-->
+        <result property="wdlj" column="yplj" jdbcType="VARCHAR"/>
+        <!--音频路径-->
+        <result property="yplj" column="yplj" jdbcType="VARCHAR"/>
+        <!--视频路径-->
+        <result property="splj" column="splj" jdbcType="VARCHAR"/>
+        <!--会议状态-->
+        <result property="hyzt" column="hyzt" jdbcType="VARCHAR"/>
+        <!--记录状态-->
+        <result property="jlzt" column="jlzt" jdbcType="VARCHAR"/>
+        <!--记录员id-->
+        <result property="jlyid" column="jlyid" jdbcType="VARCHAR"/>
+        <!--记录员姓名-->
+        <result property="jlyxm" column="jlyxm" jdbcType="VARCHAR"/>
+        <!--审核员id-->
+        <result property="shyid" column="shyid" jdbcType="VARCHAR"/>
+        <!--审核员姓名-->
+        <result property="shyxm" column="shyxm" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询时用-->
+    <sql id="base_Column_List">
+
+    </sql>
+
+    <!--
+    id:具有唯一性，不可重复，值为Dao接口类中函数名
+    parameterType:传入SQL语句中的参数类型
+    resultType:查询返回的结果集类型，可以是Java包装型对象，或者实体类型对象，如java.lang.Integer、com.springmvc.entity.User
+    resultMap:对应于上面的resultMap，是查询返回的对象集合
+    -->
+
+    <!-- 分页查询所有会议 -->
+    <select id="findByPage" parameterType="com.springmvc.entity.Page" resultMap="baseResultMap">
+        SELECT *
+        FROM conference
+        WHERE jlyid = #{userId,jdbcType=VARCHAR}
+        ORDER BY kssj
+        <![CDATA[LIMIT #{offSet},#{pageSize}
+        ]]>
+    </select>
+
+    <!-- 查询会议总数 -->
+    <select id="findCount" parameterType="com.springmvc.entity.User" resultType="java.lang.Integer">
+        SELECT COUNT(id) AS COUNTS
+        FROM conference
+        WHERE jlyid = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 插入一次新的会议 -->
+    <insert id="add" parameterType="com.springmvc.entity.Conference">
+        insert into conference(id, hymc, yhry, kssj, jssj, hydd, cbdw, hyjb, hyfl, hysx, yhzw, tplj,
+                               wdlj, yplj, splj, hyzt, jlzt, jlyid, jlyxm, shyid, shyxm)
+        values (#{id,jdbcType=VARCHAR}, #{hymc,jdbcType=VARCHAR}, #{yhry,jdbcType=VARCHAR}, #{kssj,jdbcType=TIMESTAMP},
+                #{jssj,jdbcType=TIMESTAMP}, #{hydd,jdbcType=VARCHAR}, #{cbdw,jdbcType=VARCHAR},
+                #{hyjb,jdbcType=VARCHAR}, #{hyfl,jdbcType=VARCHAR}, #{hysx,jdbcType=VARCHAR}, #{yhzw,jdbcType=VARCHAR},
+                #{tplj,jdbcType=VARCHAR}, #{wdlj,jdbcType=VARCHAR}, #{yplj,jdbcType=VARCHAR}, #{splj,jdbcType=VARCHAR},
+                #{hyzt,jdbcType=VARCHAR}, #{jlzt,jdbcType=VARCHAR}, #{jlyid,jdbcType=VARCHAR},
+                #{jlyxm,jdbcType=VARCHAR}, #{shyid,jdbcType=VARCHAR}, #{shyxm,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 根据会议id，查询单个会议 -->
+    <select id="view" parameterType="com.springmvc.entity.Conference" resultMap="baseResultMap">
+        SELECT *
+        FROM conference
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 修改后保存一个会议 -->
+    <update id="save" parameterType="com.springmvc.entity.Conference">
+        UPDATE
+            conference
+        SET hymc  = #{hymc,jdbcType=VARCHAR},
+            yhry  = #{yhry,jdbcType=VARCHAR},
+            kssj  = #{kssj,jdbcType=TIMESTAMP},
+            jssj  = #{jssj,jdbcType=TIMESTAMP},
+            hydd  = #{hydd,jdbcType=VARCHAR},
+            cbdw  = #{cbdw,jdbcType=VARCHAR},
+            hyjb  = #{hyjb,jdbcType=VARCHAR},
+            hyfl  = #{hyfl,jdbcType=VARCHAR},
+            hysx  = #{hysx,jdbcType=VARCHAR},
+            yhzw  = #{yhzw,jdbcType=VARCHAR},
+            tplj  = #{tplj,jdbcType=VARCHAR},
+            wdlj  = #{wdlj,jdbcType=VARCHAR},
+            yplj  = #{yplj,jdbcType=VARCHAR},
+            splj  = #{splj,jdbcType=VARCHAR},
+            hyzt  = #{hyzt,jdbcType=VARCHAR},
+            jlzt  = #{jlzt,jdbcType=VARCHAR},
+            jlyid = #{jlyid,jdbcType=VARCHAR},
+            jlyxm = #{jlyxm,jdbcType=VARCHAR},
+            shyid = #{shyid,jdbcType=VARCHAR},
+            shyxm = #{shyxm,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+
+
+</mapper>

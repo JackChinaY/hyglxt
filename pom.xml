@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ppgc</groupId>
@@ -7,95 +8,97 @@
     <version>1.0-SNAPSHOT</version>
     <name>ppgc Maven Webapp</name>
     <url>http://maven.apache.org</url>
+    <!-- 设置版本号 -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- spring版本号 -->
-        <spring.version>4.1.1.RELEASE</spring.version>
+        <!-- Servlet版本号 -->
+        <servlet.version>4.0.1</servlet.version>
+        <!-- Spring版本号 -->
+        <spring.version>4.3.22.RELEASE</spring.version>
         <!-- mybatis版本号 -->
-        <mybatis.version>3.2.6</mybatis.version>
+        <mybatis.version>3.4.6</mybatis.version>
         <!-- log4j日志文件管理包版本 -->
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <!-- jackson包版本 -->
-        <jackson.version>2.5.0</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
     </properties>
+    <!-- 所有依赖包 -->
     <dependencies>
+        <!-- 1.Servlet相关的包开始 -->
         <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>3.8.1</version>
-        <scope>test</scope>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.version}</version>
+            <scope>provided</scope>
         </dependency>
-        <!--单元测试依赖 -->
+        <!--<dependency>-->
+        <!--<groupId>javax.servlet.jsp</groupId>-->
+        <!--<artifactId>jsp-api</artifactId>-->
+        <!--<version>2.2</version>-->
+        <!--<scope>provided</scope>-->
+        <!--</dependency>-->
         <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.11</version>
-        <!--表示开发的时候引入，发布的时候不会加载此包 -->
-        <scope>test</scope>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
         </dependency>
+        <!-- Servlet相关的包结束 -->
 
-        <!--spring单元测试依赖 -->
-        <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-test</artifactId>
-        <version>${spring.version}</version>
-        <scope>test</scope>
-        </dependency>
-
-        <!-- springMVC核心包 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <!--spring核心包-->
+        <!-- 2.Spring相关的包开始 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
+        <!-- Beans包 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
+        <!-- 容器包 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
+        <!-- 容器依赖包 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
+        <!-- 依赖注入包 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
+        <!-- 切片包 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
-            <version>4.0.9.RELEASE</version>
+            <!--<version>4.0.9.RELEASE</version>-->
+            <version>${spring.version}</version>
         </dependency>
-
+        <!-- Spring事物管理包 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
+        <!-- Spring文本项目包 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- SpringMVC核心包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
@@ -104,107 +107,28 @@
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <!--spring核心包 end-->
+        <!--Spring相关的包结束 -->
 
-        <!-- AOP begin -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.7.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.7.4</version>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <!-- AOP end -->
-
-        <!-- mybatis核心包 -->
+        <!-- 3.Mybatis包 -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>${mybatis.version}</version>
         </dependency>
 
-        <!--mybatis spring 插件 -->
+        <!-- 4.Mybatis Spring桥接包 -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
-            <version>1.2.2</version>
+            <version>1.3.2</version>
         </dependency>
 
-        <!-- Mysql数据库驱动包 -->
+        <!-- 5.Jackson相关的包开始 -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.34</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
-
-        <!-- connection pool -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.0.5</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- 日志文件管理包 -->
-        <!-- log start -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <!--log end-->
-
-        <!--servlet-->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-        <!--servlet end -->
-        <!-- 映入JSON -->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.codehaus.jackson</groupId>-->
-            <!--<artifactId>jackson-com.springmvc.mapper-asl</artifactId>-->
-            <!--<version>1.9.13</version>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
@@ -215,98 +139,201 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        <!-- Jackson相关的包结束 -->
+
+        <!-- 6.MySQL数据库驱动包 -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.1</version>
-            <classifier>jdk15</classifier>
-        </dependency>
-        <!--用dom4j解析xml文件-->
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>3.2.2</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.34</version>
         </dependency>
 
-        <!-- ehcache -->
+        <!-- 7.连接池包 -->
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>2.6.9</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-web</artifactId>
-            <version>2.0.4</version>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.1.12</version>
+            <scope>runtime</scope>
         </dependency>
 
-        <!-- 上传组件包 -->
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-
+        <!-- 8.以下为常用工具包开始 -->
+        <!-- Apache Commons-IO包,含有实用程序类、流实现、文件过滤器、文件比较器、endian转换类等等-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
-
+        <!--Apache Commons Lang3，一个Java实用程序类包，用于java.lang层次结构中的类，或被认为是标准的，以证明java.lang中的存在-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+        <!--Apache Commons Codec软件包包含各种格式的简单编码器和解码器，如Base64和Hexadecimal。除了这些广泛使用的编码器和解码器之外，编解码器包还维护一组语音编码实用程序-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.9</version>
+            <version>1.11</version>
         </dependency>
-
+        <!--Apache Commons Collections包中包含扩展和扩充Java Collections Framework的类型-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
-        </dependency>
-
-        <!-- commons-beanutils -->
+        <!-- Apache Commons BeanUtils提供了一个易于使用但灵活的反射和内省包装器 -->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.7.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>1.9.3</version>
+        </dependency>
+        <!--Apache Commons Logging是一个瘦适配器，允许与其他众所周知的日志记录系统进行可配置的桥接-->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <!-- Apache Commons FileUpload组件提供了一种简单而灵活的方法，可以为servlet和Web应用程序添加对多部分文件上载功能的支持 -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <!-- 8.常用工具包结束 -->
+
+        <!-- 用于替换JDK日期处理的日期和时间库 -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10.1</version>
         </dependency>
 
-        <!-- freemarker -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.19</version>
-        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>junit</groupId>-->
+        <!--<artifactId>junit</artifactId>-->
+        <!--<version>3.8.1</version>-->
+        <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
+        <!--单元测试依赖 -->
+        <!--<dependency>-->
+        <!--<groupId>junit</groupId>-->
+        <!--<artifactId>junit</artifactId>-->
+        <!--<version>4.11</version>-->
+        <!--&lt;!&ndash;表示开发的时候引入，发布的时候不会加载此包 &ndash;&gt;-->
+        <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
+        <!--spring单元测试依赖 -->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework</groupId>-->
+        <!--<artifactId>spring-test</artifactId>-->
+        <!--<version>${spring.version}</version>-->
+        <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
+
+        <!-- AOP begin -->
+        <!--<dependency>-->
+        <!--<groupId>org.aspectj</groupId>-->
+        <!--<artifactId>aspectjrt</artifactId>-->
+        <!--<version>1.7.4</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.aspectj</groupId>-->
+        <!--<artifactId>aspectjweaver</artifactId>-->
+        <!--<version>1.7.4</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>cglib</groupId>-->
+        <!--<artifactId>cglib</artifactId>-->
+        <!--<version>3.1</version>-->
+        <!--</dependency>-->
+        <!-- AOP end -->
+
+
+        <!-- 日志文件管理包 -->
+        <!-- log start -->
+        <!--<dependency>-->
+        <!--<groupId>log4j</groupId>-->
+        <!--<artifactId>log4j</artifactId>-->
+        <!--<version>${log4j.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>org.slf4j</groupId>-->
+        <!--<artifactId>slf4j-api</artifactId>-->
+        <!--<version>${slf4j.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>org.slf4j</groupId>-->
+        <!--<artifactId>slf4j-log4j12</artifactId>-->
+        <!--<version>${slf4j.version}</version>-->
+        <!--</dependency>-->
+        <!--log end-->
+
+
+        <!-- 映入JSON -->
+        <!--<dependency>-->
+        <!--<groupId>org.codehaus.jackson</groupId>-->
+        <!--<artifactId>jackson-core-asl</artifactId>-->
+        <!--<version>1.9.13</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.codehaus.jackson</groupId>-->
+        <!--<artifactId>jackson-com.springmvc.mapper-asl</artifactId>-->
+        <!--<version>1.9.13</version>-->
+        <!--</dependency>-->
+
+
+        <!--<dependency>-->
+        <!--<groupId>net.sf.json-lib</groupId>-->
+        <!--<artifactId>json-lib</artifactId>-->
+        <!--<version>2.1</version>-->
+        <!--&lt;!&ndash;<classifier>jdk15</classifier>&ndash;&gt;-->
+        <!--</dependency>-->
+        <!--用dom4j解析xml文件-->
+        <!--<dependency>-->
+        <!--<groupId>dom4j</groupId>-->
+        <!--<artifactId>dom4j</artifactId>-->
+        <!--<version>3.2.2</version>-->
+        <!--</dependency>-->
+
+        <!-- ehcache -->
+        <!--<dependency>-->
+        <!--<groupId>net.sf.ehcache</groupId>-->
+        <!--<artifactId>ehcache-core</artifactId>-->
+        <!--<version>2.6.9</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>net.sf.ehcache</groupId>-->
+        <!--<artifactId>ehcache-web</artifactId>-->
+        <!--<version>2.0.4</version>-->
+        <!--</dependency>-->
+
+
+        <!--freemarker-->
+        <!--<dependency>-->
+        <!--<groupId>org.freemarker</groupId>-->
+        <!--<artifactId>freemarker</artifactId>-->
+        <!--<version>2.3.19</version>-->
+        <!--</dependency>-->
 
         <!-- dom4j读取XML -->
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>RELEASE</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>dom4j</groupId>-->
+        <!--<artifactId>dom4j</artifactId>-->
+        <!--<version>1.6.1</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.testng</groupId>-->
+        <!--<artifactId>testng</artifactId>-->
+        <!--<version>RELEASE</version>-->
+        <!--</dependency>-->
+
+
     </dependencies>
     <build>
         <finalName>ppgc</finalName>
@@ -314,14 +341,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <!-- 源代码编译版本 -->
+                    <source>1.8</source>
+                    <!-- 目标平台编译版本 -->
+                    <target>1.8</target>
+                    <!-- 项目统一字符集编码 -->
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
         </plugins>
 
-        <!-- 解决Maven项目编译后classes文件中没有.xml问题 -->
+        <!-- 解决Maven项目编译后classes文件中没有.xml问题（针对DAO层的xml文件） -->
         <resources>
             <resource>
                 <directory>src/main/java</directory>

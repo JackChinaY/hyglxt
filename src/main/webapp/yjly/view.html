@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>查看</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
+    <link rel="stylesheet" href="../plugs/layui/css/layui.css">
+    <script src="../plugs/jquery/jquery-1.11.3.min.js"></script>
+    <script src="../plugs/jquery/jquery.cookie.js"></script>
+    <script src="../plugs/layui/layui.js"></script>
+    <script src="../js/common.js"></script>
+    <script type="text/javascript">
+        $(function () {
+                layui.use(['form'], function () {
+                    var form = layui.form;
+
+                    /**
+                     * 初始化页面数据
+                     */
+                    function init() {
+                        console.log(getURLParameter("id"));
+                        if (getURLParameter("id") != null) {
+                            $.ajax({
+                                type: "POST",
+                                url: projectName + "/yjly/view",
+                                contentType: "application/json; charset=utf-8",
+                                data: JSON.stringify({
+                                    "id": getURLParameter("id")
+                                }),
+                                dataType: "json",
+                                async: true,
+                                success: function (data) {
+                                    if (data.count == "1") {
+                                        //表单初始赋值  "name": "value"
+                                        form.val('default', {
+                                                "hymc": data.data.hymc
+                                                , "yhry": data.data.yhry
+                                                , "kssj": data.data.kssj
+                                                , "jssj": data.data.jssj
+                                                , "hydd": data.data.hydd
+                                                , "cbdw": data.data.cbdw
+                                                , "hyjb": data.data.hyjb
+                                                , "hyfl": data.data.hyfl
+                                                , "hysx": data.data.hysx
+                                                , "yhzw": data.data.yhzw
+                                                , "hyzt": data.data.hyzt
+                                                , "jlzt": data.data.jlzt
+                                                , "jlyxm": data.data.jlyxm
+                                                , "shyxm": data.data.shyxm
+                                            }
+                                        )
+                                    } else {
+                                        layer.msg('查询失败');
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    layer.msg('错误：' + jqXHR.status);
+                                }
+                            });
+                        }
+                    }
+
+                    init();
+                });
+
+                /**
+                 * 获取URL中参数 key:要获取的的参数名
+                 */
+                function getURLParameter(key) {
+                    var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+                    var result = window.location.search.substr(1).match(reg);
+                    return result ? decodeURIComponent(result[2]) : null;
+                }
+            }
+        )
+        ;
+    </script>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial;
+            font-size: 14px;
+            /*min-height: 500px;*/
+            /*min-width: 500px;*/
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            overflow-x: auto;
+        }
+
+        .layui-input {
+            /*border: 0;*/
+            /*font-size: 16px;*/
+        }
+    </style>
+</head>
+<body>
+<div style="margin: 10px" class="layui-card layui-anim layui-anim-upbit">
+    <!--<div class="layui-card-header">查看会议</div>-->
+    <div class="layui-card-body">
+        <form class="layui-form" lay-filter="default">
+            <div class="layui-form-item">
+                <label class="layui-form-label">会议名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="hymc" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">与会人员</label>
+                <div class="layui-input-block">
+                    <input type="text" name="yhry" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="kssj" class="layui-input" disabled>
+                    </div>
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="jssj" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">会议地点</label>
+                    <!--style="width: 250px"-->
+                    <div class=" layui-input-inline">
+                        <input type="text" name="hydd" class="layui-input" disabled>
+                    </div>
+                    <label class="layui-form-label">承办单位</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="cbdw" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">会议级别</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="hyjb" class="layui-input" disabled>
+                    </div>
+                    <label class="layui-form-label">会议分类</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="hyfl" class="layui-input" disabled>
+                    </div>
+                    <label class="layui-form-label">会议属性</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="hysx" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">会议正文</label>
+                <div class="layui-input-block">
+                    <textarea id="hyzw" placeholder="请输入内容"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">会议状态</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="hyzt" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">记录状态</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="jlzt" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">记录员</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="jlyxm" class="layui-input" disabled>
+                    </div>
+                    <label class="layui-form-label">审核员</label>
+                    <div class=" layui-input-inline">
+                        <input type="text" name="shyxm" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

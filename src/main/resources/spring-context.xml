@@ -4,16 +4,18 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd"
        default-lazy-init="true">
 
     <description>扫描service层和dao层、连接数据库、管理事务</description>
 
-    <!-- 1.开启组件自动扫描；使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
+    <!-- 1.扫描组件：以下配置是不扫描@Controller注解，只会扫描@Service，@Repository注解的类 -->
     <context:component-scan base-package="com.springmvc"><!-- base-package 如果多个，用“,”分隔 -->
+    <!--<context:component-scan base-package="com.springmvc" use-default-filters="false">&lt;!&ndash; base-package 如果多个，用“,”分隔 &ndash;&gt;-->
+        <!-- 罗列出不扫描的注解类型 -->
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 

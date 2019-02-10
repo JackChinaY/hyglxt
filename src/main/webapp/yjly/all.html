@@ -13,18 +13,26 @@
     <!--<script src="../plugs/zui/zui.js"></script>-->
     <!--<script src="../plugs/zui/zui.datagrid.min.js"></script>-->
     <script src="../plugs/layui/layui.js"></script>
-
+    <script src="../js/common.js"></script>
     <script type="text/javascript">
         $(function () {
-            layui.use('table', function () {
+            layui.use(['table', 'layer'], function () {
                 var table = layui.table;
+                // var layer = layui.layer;
 
                 //第一个实例
                 table.render({
                     elem: '#demo',
                     height: 'full-120',
-                    // , url: '' //数据接口
+                    url: projectName + "/yjly/find", //数据接口
+                    method: 'post',
+                    contentType: 'application/json',
+                    request: {
+                        pageName: 'currPage' //当前页码的参数名称，默认：page
+                        , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                    },
                     page: true, //开启分页
+                    limit: 10,//每页显示的条数
                     toolbar: '#bar1',//开启表格头部工具栏区域
                     // toolbar: 'default',//开启表格头部工具栏区域
                     skin: 'line', //行边框风格
@@ -32,222 +40,18 @@
                     // size: 'lg', //小尺寸的表格
                     cols: [[ //表头
                         {fixed: 'left', width: '5%', type: "checkbox"},
-                        {field: 'id', title: 'ID', width: '10%', align: 'center', sort: true, type: 'numbers'},
-                        {field: 'theme', title: '会议名称', width: '30%', align: 'center', sort: true},
-                        {field: 'time', title: '时间', width: '10%', align: 'center', sort: true},
-                        {field: 'college', title: '承办单位', width: '10%', align: 'center', sort: true},
-                        {field: 'type', title: '会议类型', width: '10%', align: 'center', sort: true},
-                        {field: 'state', title: '状态', width: '10%', align: 'center', sort: true},
-                        {field: 'operation', title: '操作', width: '15%', align: 'center', toolbar: '#bar2'}
+                        {field: 'id', title: '序号', width: '5%', align: 'center', sort: true, type: 'numbers'},
+                        {field: 'id', title: 'ID', width: '0%', align: 'center', hide: true},
+                        {field: 'hymc', title: '会议名称', width: '23%', align: 'center', sort: true},
+                        {field: 'kssj', title: '开始时间', width: '12%', align: 'center', sort: true},
+                        {field: 'hydd', title: '地点', width: '10%', align: 'center', sort: true},
+                        {field: 'cbdw', title: '承办单位', width: '13%', align: 'center', sort: true},
+                        {field: 'hyjb', title: '会议级别', width: '10%', align: 'center', sort: true},
+                        {field: 'hyzt', title: '会议状态', width: '10%', align: 'center', sort: true},
+                        {field: 'operation', title: '操作', width: '12%', align: 'center', toolbar: '#bar2'}
                     ]],
-                    data: [
-                        {
-                            "id": 10001,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结',
-                        }, {
-                            "id": 10002,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结',
-                        }, {
-                            "id": 10003,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10004,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10005,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10006,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10007,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10008,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10009,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10010,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10011,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10012,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10013,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10014,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10015,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10016,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10017,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10018,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10019,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10020,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10021,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10022,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10023,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10024,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10025,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10026,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10027,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10028,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }, {
-                            "id": 10029,
-                            "time": "2018-12-22",
-                            "college": "电信学院",
-                            "type": "党政联席会议",
-                            "theme": '学院学科建设研讨会',
-                            "state": '已完结'
-                        }
-                    ]
                 });
-                //监听头工具栏事件
+                //监听头部工具栏事件
                 table.on('toolbar(table1)', function (obj) {
                     var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data; //获取选中的数据
                     switch (obj.event) {
@@ -274,13 +78,24 @@
                     ;
                 });
                 //监听行工具事件
-                table.on('tool(table1)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                table.on('tool(table1)', function (obj) { //注：tool是工具条事件名，table1是table原始容器的属性 lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                     var tr = obj.tr; //获得当前行 tr 的DOM对象
 
                     if (layEvent === 'detail') { //查看
-                        //do somehing
+                        layer.open({
+                            id: 1
+                            ,type: 2 //iframe
+                            , title: '会议详情'
+                            , area: ['95%', '95%']
+                            , content: 'yjly/view.html?id=' + data.id
+                            , btn: ['关闭']
+                            , zIndex: layer.zIndex //重点1
+                            , success: function (layero) {
+                                layer.setTop(layero); //重点2
+                            }
+                        });
                     } else if (layEvent === 'del') { //删除
                         layer.confirm('真的删除行么', function (index) {
                             obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
@@ -289,7 +104,18 @@
                         });
                     } else if (layEvent === 'edit') { //编辑
                         //do something
-
+                        layer.open({
+                            id: 2
+                            ,type: 2 //iframe
+                            , title: '会议修改'
+                            , area: ['95%', '95%']
+                            , content: 'yjly/edit.html?id=' + data.id
+                            // , btn: ['关闭']
+                            , zIndex: layer.zIndex //重点1
+                            , success: function (layero) {
+                                layer.setTop(layero); //重点2
+                            }
+                        });
                         //同步更新缓存对应的值
                         obj.update({
                             username: '123'
@@ -303,9 +129,7 @@
                         });
                     }
                 });
-
             });
-
         });
     </script>
     <style>
@@ -324,14 +148,17 @@
     </style>
 </head>
 <body>
-<div style="margin: 15px" class="layui-card layui-anim layui-anim-upbit">
+<div style="margin: 10px" class="layui-card layui-anim layui-anim-upbit">
     <div class="layui-card-header">全部会议</div>
+
     <div class="layui-card-body">
         <table id="demo" lay-filter="table1"></table>
     </div>
+    <!--表格左上顶部可操作的按钮-->
     <script type="text/html" id="bar1">
         <div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>
     </script>
+    <!--每行后面的可操作的按钮-->
     <script type="text/html" id="bar2">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>

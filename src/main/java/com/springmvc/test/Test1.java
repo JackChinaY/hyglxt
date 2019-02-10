@@ -5,12 +5,12 @@ import com.springmvc.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.testng.annotations.Test;
+//import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
 
 public class Test1 {
-        @Test
+//        @Test
     public void testUser() {
         // 1. 加载Spring配置文件，根据创建对象
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-context.xml");
@@ -23,7 +23,7 @@ public class Test1 {
     @Resource(name = "user")
     User user;
 
-    @Test
+//    @Test
     public void testUser2() {
 
         // 1. 加载Spring配置文件，根据创建对象

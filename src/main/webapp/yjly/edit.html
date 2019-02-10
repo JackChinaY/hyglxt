@@ -2,7 +2,7 @@
 <html lang="ch">
 <head>
     <meta charset="UTF-8">
-    <title>新增</title>
+    <title>修改</title>
     <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
     <link rel="stylesheet" href="../plugs/layui/css/layui.css">
     <script src="../plugs/jquery/jquery-1.11.3.min.js"></script>
@@ -29,53 +29,70 @@
             };
 
             layui.use(['form', 'layedit', 'laydate'], function () {
-                var form = layui.form, layer = layui.layer, layedit = layui.layedit, laydate = layui.laydate;
+                var form = layui.form, layedit = layui.layedit, laydate = layui.laydate;
 
-                //开始时间
-                laydate.render({
-                    elem: '#kssj', type: 'datetime', value: new Date().Format("yyyy-MM-dd HH:mm:ss"), isInitValue: true
-                });
-                //结束时间
-                laydate.render({
-                    elem: '#jssj', type: 'datetime', value: new Date().Format("yyyy-MM-dd HH:mm:ss"), isInitValue: true
-                });
-                //创建一个编辑器
-                // var editIndex = layedit.build('LAY_demo_editor');
-
-                //富文本编辑器
-                layedit.build('hyzw', {
-                    height: 180 //设置编辑器高度
-                }); //建立编辑器
-
-                //自定义验证规则
-                form.verify({
-                    hymc: function (value) {
-                        if (value.length < 5) {
-                            return '标题至少得5个字符';
-                        }
+                /**
+                 * 初始化页面数据
+                 */
+                function init() {
+                    console.log(getURLParameter("id"));
+                    if (getURLParameter("id") != null) {
+                        $.ajax({
+                            type: "POST",
+                            url: projectName + "/yjly/view",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({
+                                "id": getURLParameter("id")
+                            }),
+                            dataType: "json",
+                            async: true,
+                            success: function (data) {
+                                if (data.count == "1") {
+                                    //开始时间
+                                    laydate.render({
+                                        elem: '#kssj', type: 'datetime', value: data.data.kssj, isInitValue: true
+                                    });
+                                    //结束时间
+                                    laydate.render({
+                                        elem: '#jssj', type: 'datetime', value: data.data.jssj, isInitValue: true
+                                    });
+                                    //表单初始赋值  "name": "value"
+                                    form.val('default', {
+                                            "id": data.data.id
+                                            , "hymc": data.data.hymc
+                                            , "yhry": data.data.yhry
+                                            , "hydd": data.data.hydd
+                                            , "cbdw": data.data.cbdw
+                                            , "hyjb": data.data.hyjb
+                                            , "hyfl": data.data.hyfl
+                                            , "hysx": data.data.hysx
+                                            , "yhzw": data.data.yhzw
+                                            , "hyzt": data.data.hyzt
+                                            , "jlzt": data.data.jlzt
+                                            , "jlyid": data.data.jlyid
+                                            , "jlyxm": data.data.jlyxm
+                                            , "shyid": data.data.shyid
+                                            , "shyxm": data.data.shyxm
+                                        }
+                                    )
+                                } else {
+                                    layer.msg('查询失败');
+                                }
+                            },
+                            error: function (jqXHR) {
+                                layer.msg('错误：' + jqXHR.status);
+                            }
+                        });
                     }
-                    , pass: [
-                        /^[\S]{6,12}$/
-                        , '密码必须6到12位，且不能出现空格'
-                    ]
-                    , content: function (value) {
-                        layedit.sync(editIndex);
-                    }
-                });
+                }
 
-                //监听指定开关
-                form.on('switch(switchTest)', function (data) {
-                    layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
-                        offset: '6px'
-                    });
-                    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-                });
+                init();
 
                 //提交保存数据
                 form.on('submit(form1)', function (data) {
                     $.ajax({
                         type: "POST",
-                        url: projectName + "/yjly/add",
+                        url: projectName + "/yjly/save",
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify(data.field),
                         dataType: "json",
@@ -93,18 +110,16 @@
                     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
                 });
 
-                //表单初始赋值
-                form.val('default', {
-                    "jlyxm": $.cookie("username") // "name": "value"
-                    , "password": "123456"
-                    , "interest": 1
-                    , "like[write]": true //复选框选中状态
-                    , "close": true //开关状态
-                    , "sex": "女"
-                    , "desc": "我爱 layui"
-                })
-
             });
+
+            /**
+             * 获取URL中参数 key:要获取的的参数名
+             */
+            function getURLParameter(key) {
+                var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+                var result = window.location.search.substr(1).match(reg);
+                return result ? decodeURIComponent(result[2]) : null;
+            }
         });
     </script>
     <style>
@@ -124,9 +139,15 @@
 </head>
 <body>
 <div style="margin: 15px 15px" class="layui-card layui-anim layui-anim-upbit">
-    <div class="layui-card-header">新增会议</div>
+    <!--<div class="layui-card-header">新增会议</div>-->
     <div class="layui-card-body">
         <form class="layui-form" lay-filter="default">
+            <div class="layui-form-item" hidden>
+                <label class="layui-form-label">会议ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" class="layui-input">
+                </div>
+            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">会议名称</label>
                 <div class="layui-input-block">
@@ -143,11 +164,11 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">开始时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="yhsj" id="kssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
+                        <input type="text" name="kssj" id="kssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
                     </div>
                     <label class="layui-form-label">结束时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="yhsj" id="jssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
+                        <input type="text" name="jssj" id="jssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </div>
@@ -238,6 +259,8 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <!--记录员ID-->
+                    <input type="text" name="jlyid" hidden>
                     <label class="layui-form-label">记录员</label>
                     <div class="layui-input-inline">
                         <input type="text" name="jlyxm" lay-verify="required" placeholder="请输入记录员（必填项）" autocomplete="off" class="layui-input">

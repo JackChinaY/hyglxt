@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
+    <link rel="stylesheet" href="../plugs/layui/css/layui.css">
+    <script src="../plugs/jquery/jquery-1.11.3.min.js"></script>
+    <script src="../plugs/jquery/jquery.cookie.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../plugs/layui/layui.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            layui.use('layer', function () {
+                var layer = layui.layer;
+
+                $("#form1").click(function () {
+                    layer.open({
+                        id: 1,
+                        type: 2 //此处以iframe举例
+                        , title: '会议详情'
+                        // , area: ['1000px', '500px']
+                        , area: ['95%', '95%']
+                        , content: 'view.html'
+                        , btn: [ '关闭'] //只是为了演示
+                        // , yes: function () {
+                        // }
+                        , zIndex: layer.zIndex //重点1
+                        , success: function (layero) {
+                            layer.setTop(layero); //重点2
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+</head>
+<body>
+<button class="layui-btn" id="form1">立即提交</button>
+</body>
+</html>

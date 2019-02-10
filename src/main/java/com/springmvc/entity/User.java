@@ -98,4 +98,19 @@ public class User {
     public void setFgly(String fgly) {
         this.fgly = fgly;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", danwei='" + danwei + '\'' +
+                ", zhiwu='" + zhiwu + '\'' +
+                ", zhicheng='" + zhicheng + '\'' +
+                ", fgly='" + fgly + '\'' +
+                '}';
+    }
 }

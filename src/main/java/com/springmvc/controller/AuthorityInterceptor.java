@@ -34,10 +34,10 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
      * @param handler  表示的是被拦截的目标对象
      * @return
      * @throws IOException
-     * http://localhost:8080/Demo2/loginIn
+     * http://localhost:8080/Demo2/user/loginIn
      * request.getContextPath():/Demo2
-     * request.getRequestURI():/Demo2/loginIn
-     * request.getServletPath():/loginIn
+     * request.getRequestURI():/Demo2/user/loginIn
+     * request.getServletPath():/user/loginIn
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
@@ -48,7 +48,7 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
             System.out.println("用户请求：" + request.getServletPath() + " ，无需过滤");
             return true;
         } else {
-            if (request.getSession().getAttribute("username") == null) {
+            if (request.getSession().getAttribute("user") == null) {
                 System.out.println("用户登录超时，需要重新登录");
 //                response.sendRedirect(request.getContextPath() + "/relogin");
                 response.sendRedirect(request.getContextPath() + "/");
