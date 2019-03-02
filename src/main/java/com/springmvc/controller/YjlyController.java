@@ -65,7 +65,7 @@ public class YjlyController extends Common {
         int count = yjlyService.add(conference);
 //        System.out.println(result);
         Map<String, Object> map = new HashMap<>();
-        map.put("code", 0);//code，-1：登录失效；0：响应正常；
+        map.put("code", 0);//code，-1：登录失效；0：响应正常
         map.put("count", count);
 //        map.put("data", result);
         return map;

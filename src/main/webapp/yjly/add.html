@@ -104,7 +104,110 @@
                     , "desc": "我爱 layui"
                 })
 
+                // form.on('submit(xzyhry)', function (data) {
+                //     layer.open({
+                //         type: 2 //iframe
+                //         , title: '选择与会人员'
+                //         , area: ['80%', '80%']
+                //         // , content: 'yjly/edit.html?id=' + data.id
+                //         // , btn: ['关闭']
+                //         , zIndex: layer.zIndex //重点1
+                //         , success: function (layero) {
+                //             layer.setTop(layero); //重点2
+                //         }
+                //         , yes: function (index, layero) {
+                //             //do something
+                //             layer.close(index); //如果设定了yes回调，需进行手工关闭
+                //             table.reload('idTest', {
+                //                 where: { //设定异步数据接口的额外参数，任意设
+                //                     aaaaaa: 'xxx'
+                //                     , bbb: 'yyy'
+                //                     //…
+                //                 }
+                //                 , page: {
+                //                     curr: 1 //重新从第 1 页开始
+                //                 }
+                //             });
+                //         }
+                //     });
+                //     // return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                // });
             });
+            /**
+             * 选择与会人员
+             */
+            $("#xzyhry").click(function () {
+                layer.open({
+                    type: 2 //iframe
+                    , title: '选择与会人员'
+                    , area: ['80%', '90%']
+                    , content: 'yjly/yhry.html'
+                    , btn: ['确认', '取消']
+                    , zIndex: layer.zIndex //重点1
+                    , success: function (layero) {
+                        layer.setTop(layero); //重点2
+                    }
+                    , yes: function (index, layero) {//【确认】按钮回调函数
+                        // 获取子页面DOM
+                        var contents = $(layero).find("iframe").contents();
+                        // console.log($(contents).find("#yhry").val());
+                        $("#yhry").val($("#yhry").val() + $(contents).find("#yhry").val());
+                        layer.close(index); //如果设定了yes回调，需进行手工关闭
+                    }
+                    , btn2: function (index, layero) {//【取消】按钮回调函数
+                    }
+                });
+            })
+            /**
+             * 选择会议地点
+             */
+            $("#xzhydd").click(function () {
+                layer.open({
+                    type: 2 //iframe
+                    , title: '选择与会人员'
+                    , area: ['80%', '90%']
+                    , content: 'yjly/yhry.html'
+                    , btn: ['确认', '取消']
+                    , zIndex: layer.zIndex //重点1
+                    , success: function (layero) {
+                        layer.setTop(layero); //重点2
+                    }
+                    , yes: function (index, layero) {//【确认】按钮回调函数
+                        // 获取子页面DOM
+                        var contents = $(layero).find("iframe").contents();
+                        // console.log($(contents).find("#yhry").val());
+                        $("#yhry").val($("#yhry").val() + "、" + $(contents).find("#yhry").val());
+                        layer.close(index); //如果设定了yes回调，需进行手工关闭
+                    }
+                    , btn2: function (index, layero) {//【取消】按钮回调函数
+                    }
+                });
+            })
+            /**
+             * 选择承办单位
+             */
+            $("#xzcbdw").click(function () {
+                layer.open({
+                    type: 2 //iframe
+                    , title: '选择与会人员'
+                    , area: ['80%', '90%']
+                    , content: 'yjly/yhry.html'
+                    , btn: ['确认', '取消']
+                    , zIndex: layer.zIndex //重点1
+                    , success: function (layero) {
+                        layer.setTop(layero); //重点2
+                    }
+                    , yes: function (index, layero) {//【确认】按钮回调函数
+                        // 获取子页面DOM
+                        var contents = $(layero).find("iframe").contents();
+                        // console.log($(contents).find("#yhry").val());
+                        $("#yhry").val($("#yhry").val() + "、" + $(contents).find("#yhry").val());
+                        layer.close(index); //如果设定了yes回调，需进行手工关闭
+                    }
+                    , btn2: function (index, layero) {//【取消】按钮回调函数
+                    }
+                });
+            })
         });
     </script>
     <style>
@@ -124,7 +227,7 @@
 </head>
 <body>
 <div style="margin: 15px 15px" class="layui-card layui-anim layui-anim-upbit">
-    <div class="layui-card-header">新增会议</div>
+    <div class="layui-card-header">会议预约</div>
     <div class="layui-card-body">
         <form class="layui-form" lay-filter="default">
             <div class="layui-form-item">
@@ -136,7 +239,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">与会人员</label>
                 <div class="layui-input-block">
-                    <input type="text" name="yhry" placeholder="请输入与会人员" class="layui-input">
+                    <input type="text" id="yhry" name="yhry" placeholder="请输入与会人员" class="layui-input" style="display: inline; width: 93%">
+                    <input type="button" id="xzyhry" class="layui-btn layui-btn-primary" title="选择与会人员" value="..." style="margin-bottom: 3px">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -145,23 +249,24 @@
                     <div class="layui-input-inline">
                         <input type="text" name="yhsj" id="kssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
                     </div>
-                    <label class="layui-form-label">结束时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="yhsj" id="jssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
+                    <label class="layui-form-label">会议地点</label>
+                    <div class=" layui-input-inline">
+                        <input type="text" name="hydd" placeholder="请输入会议地点" autocomplete="off" class="layui-input" style="display: inline">
                     </div>
+                    <input type="button" id="xzhydd" class="layui-btn layui-btn-primary" title="选择会议地点" value="...">
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">会议地点</label>
-                    <!--style="width: 250px"-->
-                    <div class=" layui-input-inline">
-                        <input type="text" name="hydd" placeholder="请输入会议地点" autocomplete="off" class="layui-input">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="yhsj" id="jssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
                     </div>
                     <label class="layui-form-label">承办单位</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="cbdw" placeholder="请输入承办单位" autocomplete="off" class="layui-input">
+                        <input type="text" name="cbdw" placeholder="请输入承办单位" autocomplete="off" class="layui-input" style="display: inline">
                     </div>
+                    <input type="button" id="xzcbdw" class="layui-btn layui-btn-primary" title="选择承办单位" value="...">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -265,6 +370,7 @@
                 </div>
             </div>
         </form>
+        <!--<button id="xzyhry" class="layui-btn layui-btn-primary" title="选择与会人员">...</button>-->
     </div>
 </div>
 </body>

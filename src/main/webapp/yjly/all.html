@@ -86,7 +86,7 @@
                     if (layEvent === 'detail') { //查看
                         layer.open({
                             id: 1
-                            ,type: 2 //iframe
+                            , type: 2 //iframe
                             , title: '会议详情'
                             , area: ['95%', '95%']
                             , content: 'yjly/view.html?id=' + data.id
@@ -106,7 +106,7 @@
                         //do something
                         layer.open({
                             id: 2
-                            ,type: 2 //iframe
+                            , type: 2 //iframe
                             , title: '会议修改'
                             , area: ['95%', '95%']
                             , content: 'yjly/edit.html?id=' + data.id
@@ -114,6 +114,20 @@
                             , zIndex: layer.zIndex //重点1
                             , success: function (layero) {
                                 layer.setTop(layero); //重点2
+                            }
+                            , yes: function (index, layero) {
+                                //do something
+                                layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                table.reload('idTest', {
+                                    where: { //设定异步数据接口的额外参数，任意设
+                                        aaaaaa: 'xxx'
+                                        , bbb: 'yyy'
+                                        //…
+                                    }
+                                    , page: {
+                                        curr: 1 //重新从第 1 页开始
+                                    }
+                                });
                             }
                         });
                         //同步更新缓存对应的值
