@@ -1,9 +1,11 @@
 package com.springmvc.service.impl;
 
+import com.springmvc.dao.WorkerDao;
 import com.springmvc.dao.YjlyDao;
 import com.springmvc.entity.Conference;
 import com.springmvc.entity.Page;
 import com.springmvc.entity.User;
+import com.springmvc.entity.Worker;
 import com.springmvc.service.YjlyService;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class YjlyServiceImpl implements YjlyService {
 
     @Resource
     private YjlyDao yjlyDao;
+
+    @Resource
+    private WorkerDao workerDao;
 
     /**
      * 分页查询所有会议
@@ -57,5 +62,21 @@ public class YjlyServiceImpl implements YjlyService {
     @Override
     public int save(Conference conference) {
         return yjlyDao.save(conference);
+    }
+
+    /**
+     * 删除一个会议
+     */
+    @Override
+    public int delete(Conference conference) {
+        return yjlyDao.delete(conference);
+    }
+
+    /**
+     * 按单位查询所有教职工
+     */
+    @Override
+    public List<Worker> findWorkersByDW(Worker worker) {
+        return workerDao.findAll(worker);
     }
 }

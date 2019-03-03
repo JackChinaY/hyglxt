@@ -2,7 +2,7 @@
 <html lang="ch">
 <head>
     <meta charset="UTF-8">
-    <title>与会人员</title>
+    <title>选择与会人员</title>
     <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
     <link rel="stylesheet" href="../plugs/layui/css/layui.css">
     <script src="../plugs/jquery/jquery-1.11.3.min.js"></script>
@@ -18,39 +18,31 @@
                      * 初始化页面数据
                      */
                     function init() {
-                        // console.log(getURLParameter("id"));
-                        if (getURLParameter("id") != null) {
+                        // console.log(getURLParameter("danwei"));
+                        if (getURLParameter("danwei") != null) {
                             $.ajax({
                                 type: "POST",
-                                url: projectName + "/yjly/view",
+                                url: projectName + "/yjly/findWorkersByDW",
                                 contentType: "application/json; charset=utf-8",
                                 data: JSON.stringify({
-                                    "id": getURLParameter("id")
+                                    "danwei": getURLParameter("danwei")
                                 }),
                                 dataType: "json",
-                                async: true,
+                                // async: true,
                                 success: function (data) {
-                                    if (data.count == "1") {
-                                        //表单初始赋值  "name": "value"
-                                        form.val('default', {
-                                                "hymc": data.data.hymc
-                                                , "yhry": data.data.yhry
-                                                , "kssj": data.data.kssj
-                                                , "jssj": data.data.jssj
-                                                , "hydd": data.data.hydd
-                                                , "cbdw": data.data.cbdw
-                                                , "hyjb": data.data.hyjb
-                                                , "hyfl": data.data.hyfl
-                                                , "hysx": data.data.hysx
-                                                , "yhzw": data.data.yhzw
-                                                , "hyzt": data.data.hyzt
-                                                , "jlzt": data.data.jlzt
-                                                , "jlyxm": data.data.jlyxm
-                                                , "shyxm": data.data.shyxm
+                                    if (data.count > 0) {
+                                        var html = "";
+                                        for (var i = 0; i < data.count; i++) {
+                                            if (data.data[i].name.toString().length == 2) {
+                                                html += '<input type="checkbox" title="' + data.data[i].name.substring(0, 1) + "&#8195;" + data.data[i].name.substring(1, 2) + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
+                                            } else {
+                                                html += '<input type="checkbox" title="' + data.data[i].name + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
                                             }
-                                        )
+                                        }
+                                        $("#center").html(html);
+                                        form.render();//页面刷新
                                     } else {
-                                        layer.msg('查询失败');
+                                        layer.msg('暂无数据');
                                     }
                                 },
                                 error: function (jqXHR) {
@@ -60,12 +52,12 @@
                         }
 
 
-                        var html = "";
-                        for (var i = 0; i < 20; i++) {
-                            html += '<input type="checkbox" title="韩斌" value="韩斌" lay-filter="renyuan">'
-                        }
-                        $("#center").html(html);
-                        form.render();//页面刷新
+                        // var html = "";
+                        // for (var i = 0; i < 20; i++) {
+                        //     html += '<input type="checkbox" title="韩斌" value="韩斌" lay-filter="renyuan">'
+                        // }
+                        // $("#center").html(html);
+                        // form.render();//页面刷新
                     }
 
                     init();

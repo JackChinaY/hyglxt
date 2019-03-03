@@ -71,6 +71,7 @@ public class SystemController {
         Map<String, Object> map = new HashMap<>();
         map.put("code", flag);
         map.put("username", user.getUsername());
+        map.put("danwei", result.getDanwei());
         return map;
     }
 

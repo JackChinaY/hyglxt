@@ -44,6 +44,7 @@
                         success: function (data) {
                             if (data.code == "1") {
                                 $.cookie('username', data.username);
+                                $.cookie('danwei', data.danwei);
                                 location.href = "index";
                             } else {
                                 layer.msg('用户名或密码错误');

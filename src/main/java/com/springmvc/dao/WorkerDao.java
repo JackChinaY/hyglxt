@@ -3,21 +3,21 @@ package com.springmvc.dao;
 import com.springmvc.entity.Conference;
 import com.springmvc.entity.Page;
 import com.springmvc.entity.User;
-import org.apache.ibatis.annotations.Param;
+import com.springmvc.entity.Worker;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * 院记录员
+ * 教职工
  */
 @Repository //@Repository用于注解Dao层
-public interface YjlyDao {
+public interface WorkerDao {
 
     /**
-     * 分页查询所有会议
+     * 按单位查询所有教职工
      */
-    List<Conference> findByPage(Page page);
+    List<Worker> findAll(Worker worker);
 
     /**
      * 查询会议总数
@@ -38,9 +38,4 @@ public interface YjlyDao {
      * 修改保存一个会议
      */
     int save(Conference conference);
-
-    /**
-     * 删除一个会议
-     */
-    int delete(Conference conference);
 }

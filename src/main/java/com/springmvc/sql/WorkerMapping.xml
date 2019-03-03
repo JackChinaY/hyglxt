@@ -3,68 +3,45 @@
 <!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
 例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
  -->
-<mapper namespace="com.springmvc.dao.YjlyDao">
+<mapper namespace="com.springmvc.dao.WorkerDao">
     <!--
     实体类和数据库之间的字段映射
 　　1.id 必须唯一， 用于标示这个resultMap的唯一性，在使用resultMap的时候，就是通过id引用
 　　2.type 对应的返回类型，可以是javabean, 也可以是其它
 　　3.extends 继承其他resultMap标签
     -->
-    <resultMap id="baseResultMap" type="com.springmvc.entity.Conference">
+    <resultMap id="baseResultMap" type="com.springmvc.entity.Worker">
         <!--
-        1.id 唯一性，注意啦，这个id用于标示这个javabean对象的唯一性， 不一定会是数据库的主键（不要把它理解为数据库对应表的主键）
+        1.id 唯一性，注意，这个id用于标示这个javabean对象的唯一性， 不一定会是数据库的主键（不要把它理解为数据库对应表的主键）
         2.property 实体类中属性名
         3.column 对应数据库表的列名（这样，当javabean的属性与数据库对应表的列名不一致的时候，就能通过指定这个保持正常映射了）
         4.jdbcType 表示数据库中该字段的类型
 　　     -->
-        <!--会议ID 32位UUID-->
+        <!--用户ID 32位UUID-->
         <id property="id" column="id" jdbcType="VARCHAR"/>
-        <!--会议名称-->
-        <result property="hymc" column="hymc" jdbcType="VARCHAR"/>
-        <!--与会人员-->
-        <result property="yhry" column="yhry" jdbcType="VARCHAR"/>
-        <!--开始时间-->
-        <result property="kssj" column="kssj" jdbcType="TIMESTAMP"/>
-        <!--结束时间-->
-        <result property="jssj" column="jssj" jdbcType="TIMESTAMP"/>
-        <!--会议地点-->
-        <result property="hydd" column="hydd" jdbcType="VARCHAR"/>
-        <!--承办单位-->
-        <result property="cbdw" column="cbdw" jdbcType="VARCHAR"/>
-        <!--会议级别-->
-        <result property="hyjb" column="hyjb" jdbcType="VARCHAR"/>
-        <!--会议分类-->
-        <result property="hyfl" column="hyfl" jdbcType="VARCHAR"/>
-        <!--会议属性-->
-        <result property="hysx" column="hysx" jdbcType="VARCHAR"/>
-        <!--会议正文-->
-        <result property="yhzw" column="yhzw" jdbcType="VARCHAR"/>
-        <!--图片路径-->
-        <result property="tplj" column="tplj" jdbcType="VARCHAR"/>
-        <!--文档路径-->
-        <result property="wdlj" column="yplj" jdbcType="VARCHAR"/>
-        <!--音频路径-->
-        <result property="yplj" column="yplj" jdbcType="VARCHAR"/>
-        <!--视频路径-->
-        <result property="splj" column="splj" jdbcType="VARCHAR"/>
-        <!--会议状态-->
-        <result property="hyzt" column="hyzt" jdbcType="VARCHAR"/>
-        <!--记录状态-->
-        <result property="jlzt" column="jlzt" jdbcType="VARCHAR"/>
-        <!--记录员id-->
-        <result property="jlyid" column="jlyid" jdbcType="VARCHAR"/>
-        <!--记录员姓名-->
-        <result property="jlyxm" column="jlyxm" jdbcType="VARCHAR"/>
-        <!--审核员id-->
-        <result property="shyid" column="shyid" jdbcType="VARCHAR"/>
-        <!--审核员姓名-->
-        <result property="shyxm" column="shyxm" jdbcType="VARCHAR"/>
+        <!--工号-->
+        <result property="number" column="number" jdbcType="VARCHAR"/>
+        <!--姓名-->
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <!--性别-->
+        <result property="sex" column="sex" jdbcType="VARCHAR"/>
+        <!--管理服务部门/教学科研单位/驻校单位-->
+        <result property="level1" column="level1" jdbcType="VARCHAR"/>
+        <!--党委部门/行政部门/群团组织/教辅部门/后勤产业部门/专业学院/独立学院/科研单位/驻校单位-->
+        <result property="level2" column="level2" jdbcType="VARCHAR"/>
+        <!--归属单位学院-->
+        <result property="danwei" column="danwei" jdbcType="VARCHAR"/>
+        <!--职务-->
+        <result property="zhiwu" column="zhiwu" jdbcType="VARCHAR"/>
+        <!--职称-->
+        <result property="zhicheng" column="zhicheng" jdbcType="VARCHAR"/>
+        <!--分管领域-->
+        <result property="fgly" column="fgly" jdbcType="VARCHAR"/>
+        <!--办公电话-->
+        <result property="bgdh" column="bgdh" jdbcType="VARCHAR"/>
+        <!--手机号码-->
+        <result property="sjhm" column="sjhm" jdbcType="VARCHAR"/>
     </resultMap>
-
-    <!--查询时用-->
-    <sql id="base_Column_List">
-
-    </sql>
 
     <!--
     id:具有唯一性，不可重复，值为Dao接口类中函数名
@@ -73,15 +50,23 @@
     resultMap:对应于上面的resultMap，是查询返回的对象集合
     -->
 
-    <!-- 分页查询所有会议 -->
-    <select id="findByPage" parameterType="com.springmvc.entity.Page" resultMap="baseResultMap">
+    <!-- 按单位查询所有教职工 -->
+    <select id="findAll" parameterType="com.springmvc.entity.Worker" resultMap="baseResultMap">
         SELECT *
-        FROM conference
-        WHERE jlyid = #{userId,jdbcType=VARCHAR}
-        ORDER BY kssj
-        <![CDATA[LIMIT #{offSet},#{pageSize}
-        ]]>
+        FROM worker
+        WHERE danwei = #{danwei,jdbcType=VARCHAR}
+        ORDER BY convert(substr(name, 1, 1) using 'GBK')
     </select>
+
+    <!-- 去重查询所有单位 -->
+    <select id="findDW">
+        SELECT DISTINCT danwei
+        ORDER BY convert(substr(danwei, 1, 1) using 'GBK')
+    </select>
+
+
+
+
 
     <!-- 查询会议总数 -->
     <select id="findCount" parameterType="com.springmvc.entity.User" resultType="java.lang.Integer">
@@ -135,12 +120,6 @@
             shyxm = #{shyxm,jdbcType=VARCHAR}
         WHERE id = #{id,jdbcType=VARCHAR}
     </update>
-
-    <delete id="delete" parameterType="com.springmvc.entity.Conference">
-        DELETE
-        FROM conference
-        WHERE id = #{id,jdbcType=VARCHAR}
-    </delete>
 
 
 </mapper>

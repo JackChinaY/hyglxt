@@ -4,6 +4,7 @@ package com.springmvc.service;
 import com.springmvc.entity.Conference;
 import com.springmvc.entity.Page;
 import com.springmvc.entity.User;
+import com.springmvc.entity.Worker;
 
 import java.util.List;
 import java.util.Map;
@@ -37,4 +38,14 @@ public interface YjlyService {
      * 修改保存一个会议
      */
     int save(Conference conference);
+
+    /**
+     * 删除一个会议
+     */
+    int delete(Conference conference);
+
+    /**
+     * 按单位查询所有教职工
+     */
+    List<Worker> findWorkersByDW(Worker worker);
 }

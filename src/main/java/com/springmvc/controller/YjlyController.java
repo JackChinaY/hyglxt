@@ -3,6 +3,7 @@ package com.springmvc.controller;
 import com.springmvc.entity.Conference;
 import com.springmvc.entity.Page;
 import com.springmvc.entity.User;
+import com.springmvc.entity.Worker;
 import com.springmvc.service.YjlyService;
 import com.springmvc.util.Users;
 import org.springframework.stereotype.Controller;
@@ -86,6 +87,7 @@ public class YjlyController extends Common {
         map.put("data", result.get(0));
         return map;
     }
+
     /**
      * 修改保存一个会议
      */
@@ -99,6 +101,22 @@ public class YjlyController extends Common {
         map.put("code", 0);//code，-1：登录失效；0：响应正常；
         map.put("count", count);
 //        map.put("data", result);
+        return map;
+    }
+
+    /**
+     * 按单位查询所有教职工
+     */
+    @RequestMapping(value = "/findWorkersByDW", method = RequestMethod.POST)
+    @ResponseBody//处理 AJAX请求，返回响应的内容，如json数据
+    public Map<String, Object> findWorkersByDW(@RequestBody Worker worker) {
+        System.out.println("数据 :" + worker.toString());
+        List<Worker> result = yjlyService.findWorkersByDW(worker);
+//        System.out.println(result);
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", 0);//code，-1：登录失效；0：响应正常；
+        map.put("count", result.size());
+        map.put("data", result);
         return map;
     }
 }
