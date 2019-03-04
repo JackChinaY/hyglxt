@@ -48,4 +48,9 @@ public interface YjlyService {
      * 按单位查询所有教职工
      */
     List<Worker> findWorkersByDW(Worker worker);
+
+    /**
+     * 去重查询所有单位
+     */
+    List<Worker> findDW(Worker worker);
 }

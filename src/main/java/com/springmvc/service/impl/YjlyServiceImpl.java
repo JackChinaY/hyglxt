@@ -79,4 +79,12 @@ public class YjlyServiceImpl implements YjlyService {
     public List<Worker> findWorkersByDW(Worker worker) {
         return workerDao.findAll(worker);
     }
+
+    /**
+     * 去重查询所有单位
+     */
+    @Override
+    public List<Worker> findDW(Worker worker) {
+        return workerDao.findDW(worker);
+    }
 }

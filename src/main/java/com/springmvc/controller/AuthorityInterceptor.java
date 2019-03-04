@@ -43,13 +43,13 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        System.out.println("前置通知：" + request.getContextPath() + "   " + request.getRequestURI() + "   " + request.getServletPath());
+//        System.out.println("前置通知：" + request.getContextPath() + "   " + request.getRequestURI() + "   " + request.getServletPath());
         if (request.getServletPath().equals("/loginIn")) {
-            System.out.println("用户请求：" + request.getServletPath() + " ，无需过滤");
+//            System.out.println("用户请求：" + request.getServletPath() + " ，无需过滤");
             return true;
         } else {
             if (request.getSession().getAttribute("user") == null) {
-                System.out.println("用户登录超时，需要重新登录");
+//                System.out.println("用户登录超时，需要重新登录");
 //                response.sendRedirect(request.getContextPath() + "/relogin");
                 response.sendRedirect(request.getContextPath() + "/");
                 return false;

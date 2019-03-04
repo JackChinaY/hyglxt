@@ -20,6 +20,11 @@ public interface WorkerDao {
     List<Worker> findAll(Worker worker);
 
     /**
+     * 去重查询所有单位
+     */
+    List<Worker> findDW(Worker worker);
+
+    /**
      * 查询会议总数
      */
     int findCount(User user);

@@ -59,13 +59,12 @@
     </select>
 
     <!-- 去重查询所有单位 -->
-    <select id="findDW">
+    <select id="findDW" parameterType="com.springmvc.entity.Worker" resultMap="baseResultMap">
         SELECT DISTINCT danwei
+        FROM worker
+        WHERE level1 = #{level1,jdbcType=VARCHAR}
         ORDER BY convert(substr(danwei, 1, 1) using 'GBK')
     </select>
-
-
-
 
 
     <!-- 查询会议总数 -->

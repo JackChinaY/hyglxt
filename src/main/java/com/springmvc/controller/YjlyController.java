@@ -119,4 +119,29 @@ public class YjlyController extends Common {
         map.put("data", result);
         return map;
     }
+
+    /**
+     * 去重查询所有单位
+     */
+    @RequestMapping(value = "/findDW", method = RequestMethod.POST)
+    @ResponseBody//处理 AJAX请求，返回响应的内容，如json数据
+    public Map<String, Object> findDW(@RequestBody Worker worker) {
+//        System.out.println("数据 :" + worker.toString());
+        worker.setLevel1("管理服务部门");
+        List<Worker> result1 = yjlyService.findDW(worker);
+        worker.setLevel1("教学科研单位");
+        List<Worker> result2 = yjlyService.findDW(worker);
+        //查询本单位的教职工
+        List<Worker> result3 = yjlyService.findWorkersByDW(worker);
+//        System.out.println(result);
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", 0);//code，-1：登录失效；0：响应正常；
+        map.put("count1", result1.size());
+        map.put("count2", result2.size());
+        map.put("count3", result3.size());
+        map.put("data1", result1);
+        map.put("data2", result2);
+        map.put("data3", result3);
+        return map;
+    }
 }
