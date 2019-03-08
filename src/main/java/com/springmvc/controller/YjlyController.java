@@ -35,7 +35,7 @@ public class YjlyController extends Common {
     @RequestMapping(value = "/find", method = RequestMethod.POST)
     @ResponseBody//处理 AJAX请求，返回响应的内容，如json数据
     public Map<String, Object> findByPage(@RequestBody Page page) {
-        System.out.println("当前页 :" + page.getCurrPage() + "页大小 :" + page.getPageSize());
+//        System.out.println("当前页 :" + page.getCurrPage() + "页大小 :" + page.getPageSize());
         //设置页码偏移量
         page.setOffSet((page.getCurrPage() - 1) * page.getPageSize());
         page.setUserId(getCurrentUser().getId());
@@ -112,11 +112,19 @@ public class YjlyController extends Common {
     public Map<String, Object> findWorkersByDW(@RequestBody Worker worker) {
         System.out.println("数据 :" + worker.toString());
         List<Worker> result = yjlyService.findWorkersByDW(worker);
+        //查询本单位所有存在的职务
+        List<Worker> result4 = yjlyService.findZhiWuByDW(worker);
+        //查询本单位所有存在的职称
+        List<Worker> result5 = yjlyService.findZhiChengByDW(worker);
 //        System.out.println(result);
         Map<String, Object> map = new HashMap<>();
         map.put("code", 0);//code，-1：登录失效；0：响应正常；
         map.put("count", result.size());
         map.put("data", result);
+        map.put("count4", result4.size());
+        map.put("count5", result5.size());
+        map.put("data4", result4);
+        map.put("data5", result5);
         return map;
     }
 
@@ -133,15 +141,23 @@ public class YjlyController extends Common {
         List<Worker> result2 = yjlyService.findDW(worker);
         //查询本单位的教职工
         List<Worker> result3 = yjlyService.findWorkersByDW(worker);
+        //查询本单位所有存在的职务
+        List<Worker> result4 = yjlyService.findZhiWuByDW(worker);
+        //查询本单位所有存在的职称
+        List<Worker> result5 = yjlyService.findZhiChengByDW(worker);
 //        System.out.println(result);
         Map<String, Object> map = new HashMap<>();
         map.put("code", 0);//code，-1：登录失效；0：响应正常；
         map.put("count1", result1.size());
         map.put("count2", result2.size());
         map.put("count3", result3.size());
+        map.put("count4", result4.size());
+        map.put("count5", result5.size());
         map.put("data1", result1);
         map.put("data2", result2);
         map.put("data3", result3);
+        map.put("data4", result4);
+        map.put("data5", result5);
         return map;
     }
 }

@@ -25,6 +25,16 @@ public interface WorkerDao {
     List<Worker> findDW(Worker worker);
 
     /**
+     * 查询本单位所有存在的职务
+     */
+    List<Worker> findZhiWuByDW(Worker worker);
+
+    /**
+     * 询本单位所有存在的职称
+     */
+    List<Worker> findZhiChengByDW(Worker worker);
+
+    /**
      * 查询会议总数
      */
     int findCount(User user);
@@ -43,4 +53,6 @@ public interface WorkerDao {
      * 修改保存一个会议
      */
     int save(Conference conference);
+
+
 }

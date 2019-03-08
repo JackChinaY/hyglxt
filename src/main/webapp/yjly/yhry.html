@@ -36,7 +36,7 @@
                                         html += '<option value="' + data.data1[i].danwei + '">' + data.data1[i].danwei + '</option>'
                                     }
                                     $("#bm").html(html);
-                                    form.render();//页面刷新
+                                    // form.render();//页面刷新
                                 }
                                 //设置教学科研单位的下拉框内容
                                 if (data.count2 > 0) {
@@ -45,7 +45,25 @@
                                         html += '<option value="' + data.data2[i].danwei + '">' + data.data2[i].danwei + '</option>'
                                     }
                                     $("#ky").html(html);
-                                    form.render();//页面刷新
+                                    // form.render();//页面刷新
+                                }
+                                //设置职务下拉框内容
+                                if (data.count4 > 0) {
+                                    var html = '<option value=""></option>';
+                                    for (var i = 0; i < data.count4; i++) {
+                                        html += '<option value="' + data.data4[i].zhiwu + '">' + data.data4[i].zhiwu + '</option>'
+                                    }
+                                    $("#zw").html(html);
+                                    // form.render();//页面刷新
+                                }
+                                //设置职称下拉框内容
+                                if (data.count5 > 0) {
+                                    var html = '<option value=""></option>';
+                                    for (var i = 0; i < data.count5; i++) {
+                                        html += '<option value="' + data.data5[i].zhicheng + '">' + data.data5[i].zhicheng + '</option>'
+                                    }
+                                    $("#zc").html(html);
+                                    // form.render();//页面刷新
                                 }
                                 //设置本单位的下拉框内容
                                 if (data.count3 > 0) {
@@ -58,10 +76,12 @@
                                         }
                                     }
                                     $("#center").html(html);
-                                    form.render();//页面刷新
+                                    // form.render();//页面刷新
                                 } else {
                                     layer.msg('暂无数据');
                                 }
+                                form.render();//页面刷新
+                                $("#danwei").val(getURLParameter("danwei"));
                                 /**
                                  * 表单初始赋值
                                  */
@@ -74,47 +94,7 @@
                                 layer.msg('错误：' + jqXHR.status);
                             }
                         });
-
                         // console.log(getURLParameter("danwei"));
-                        // if (getURLParameter("danwei") != null) {
-                        //     $.ajax({
-                        //         type: "POST",
-                        //         url: projectName + "/yjly/findWorkersByDW",
-                        //         contentType: "application/json; charset=utf-8",
-                        //         data: JSON.stringify({
-                        //             "danwei": getURLParameter("danwei")
-                        //         }),
-                        //         dataType: "json",
-                        //         // async: true,
-                        //         success: function (data) {
-                        //             if (data.count > 0) {
-                        //                 var html = "";
-                        //                 for (var i = 0; i < data.count; i++) {
-                        //                     if (data.data[i].name.toString().length == 2) {
-                        //                         html += '<input type="checkbox" title="' + data.data[i].name.substring(0, 1) + "&#8195;" + data.data[i].name.substring(1, 2) + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                        //                     } else {
-                        //                         html += '<input type="checkbox" title="' + data.data[i].name + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                        //                     }
-                        //                 }
-                        //                 $("#center").html(html);
-                        //                 form.render();//页面刷新
-                        //             } else {
-                        //                 layer.msg('暂无数据');
-                        //             }
-                        //         },
-                        //         error: function (jqXHR) {
-                        //             layer.msg('错误：' + jqXHR.status);
-                        //         }
-                        //     });
-                        // }
-
-
-                        // var html = "";
-                        // for (var i = 0; i < 20; i++) {
-                        //     html += '<input type="checkbox" title="韩斌" value="韩斌" lay-filter="renyuan">'
-                        // }
-                        // $("#center").html(html);
-                        // form.render();//页面刷新
                     }
 
                     init();
@@ -122,62 +102,37 @@
                      * 选中或撤销选择
                      */
                     form.on('checkbox(renyuan)', function (data) {
-                        // if ($("#yhry").val() == "") {
-                        //     if (data.elem.checked == true)
-                        //         $("#yhry").val(data.value + " ");
-                        //
-                        // } else {
                         if (data.elem.checked == true) {
                             $("#yhry").val($("#yhry").val() + data.value + " ");
                         } else {
                             $("#yhry").val($("#yhry").val().replace(data.value + " ", ""));
                         }
-                        // }
                     });
                     /**
                      * 监听 管理服务部门 select选择
                      */
-                    form.on('select(bm)', function (data) {
-                        $.ajax({
-                            type: "POST",
-                            url: projectName + "/yjly/findWorkersByDW",
-                            contentType: "application/json; charset=utf-8",
-                            data: JSON.stringify({
-                                "danwei": data.value  //得到被选中的值
-                            }),
-                            dataType: "json",
-                            // async: true,
-                            success: function (data) {
-                                if (data.count > 0) {
-                                    var html = "";
-                                    for (var i = 0; i < data.count; i++) {
-                                        if (data.data[i].name.toString().length == 2) {
-                                            html += '<input type="checkbox" title="' + data.data[i].name.substring(0, 1) + "&#8195;" + data.data[i].name.substring(1, 2) + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                                        } else {
-                                            html += '<input type="checkbox" title="' + data.data[i].name + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                                        }
-                                    }
-                                    $("#center").html(html);
-                                    form.render();//页面刷新
-                                } else {
-                                    layer.msg('暂无数据');
-                                }
-                            },
-                            error: function (jqXHR) {
-                                layer.msg('错误：' + jqXHR.status);
-                            }
-                        });
+                    form.on('select(bm)', function (data1) {
+                        form.val("default", {"ky": ""});
+                        chaxun(data1);
                     });
                     /**
                      * 监听 教学科研单位 select选择
                      */
-                    form.on('select(ky)', function (data) {
+                    form.on('select(ky)', function (data1) {
+                        form.val("default", {"bm": ""});
+                        chaxun(data1);
+                    });
+
+                    /**
+                     *查询该单位下的教职工
+                     */
+                    function chaxun(data1) {
                         $.ajax({
                             type: "POST",
                             url: projectName + "/yjly/findWorkersByDW",
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify({
-                                "danwei": data.value  //得到被选中的值
+                                "danwei": data1.value  //得到被选中的值
                             }),
                             dataType: "json",
                             // async: true,
@@ -192,7 +147,64 @@
                                         }
                                     }
                                     $("#center").html(html);
+                                    $("#danwei").val(data1.value);//标记当前选定单位
+                                    //设置职务下拉框内容
+                                    if (data.count4 > 0) {
+                                        var html = '<option value=""></option>';
+                                        for (var i = 0; i < data.count4; i++) {
+                                            html += '<option value="' + data.data4[i].zhiwu + '">' + data.data4[i].zhiwu + '</option>'
+                                        }
+                                        $("#zw").html(html);
+                                    }
+                                    //设置职称下拉框内容
+                                    if (data.count5 > 0) {
+                                        var html = '<option value=""></option>';
+                                        for (var i = 0; i < data.count5; i++) {
+                                            html += '<option value="' + data.data5[i].zhicheng + '">' + data.data5[i].zhicheng + '</option>'
+                                        }
+                                        $("#zc").html(html);
+                                    }
                                     form.render();//页面刷新
+
+                                } else {
+                                    layer.msg('暂无数据');
+                                }
+                            },
+                            error: function (jqXHR) {
+                                layer.msg('错误：' + jqXHR.status);
+                            }
+                        });
+                    }
+
+                    /**
+                     * 监听 职务 select选择
+                     */
+                    form.on('select(zw)', function (data1) {
+                        $.ajax({
+                            type: "POST",
+                            url: projectName + "/yjly/findWorkersByDW",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({
+                                "danwei": $("#danwei").val() //得到被选中的单位
+                                , "zhiwu": "<" + data1.value + ">"  //得到被选中的职务
+                            }),
+                            dataType: "json",
+                            // async: true,
+                            success: function (data) {
+                                if (data.count > 0) {
+                                    var html = '';
+                                    for (var i = 0; i < data.count; i++) {
+                                        if (data.data[i].name.toString().length == 2) {
+                                            html += '<input type="checkbox" title="' + data.data[i].name.substring(0, 1) + "&#8195;" + data.data[i].name.substring(1, 2) + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
+                                        } else {
+                                            html += '<input type="checkbox" title="' + data.data[i].name + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
+                                        }
+                                    }
+                                    $("#center").html(html);
+                                    form.render();//页面刷新
+                                    form.val("default", {
+                                        "zc": ""
+                                    });
                                 } else {
                                     layer.msg('暂无数据');
                                 }
@@ -202,6 +214,46 @@
                             }
                         });
                     });
+
+                    /**
+                     * 监听 职称 select选择
+                     */
+                    form.on('select(zc)', function (data1) {
+                        $.ajax({
+                            type: "POST",
+                            url: projectName + "/yjly/findWorkersByDW",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({
+                                "danwei": $("#danwei").val() //得到被选中的单位
+                                , "zhicheng": "<" + data1.value + ">"  //得到被选中的职称
+                            }),
+                            dataType: "json",
+                            // async: true,
+                            success: function (data) {
+                                if (data.count > 0) {
+                                    var html = '';
+                                    for (var i = 0; i < data.count; i++) {
+                                        if (data.data[i].name.toString().length == 2) {
+                                            html += '<input type="checkbox" title="' + data.data[i].name.substring(0, 1) + "&#8195;" + data.data[i].name.substring(1, 2) + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
+                                        } else {
+                                            html += '<input type="checkbox" title="' + data.data[i].name + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
+                                        }
+                                    }
+                                    $("#center").html(html);
+                                    form.render();//页面刷新
+                                    form.val("default", {
+                                        "zw": ""
+                                    });
+                                } else {
+                                    layer.msg('暂无数据');
+                                }
+                            },
+                            error: function (jqXHR) {
+                                layer.msg('错误：' + jqXHR.status);
+                            }
+                        });
+                    });
+
                     /**
                      * 表单初始赋值
                      */
@@ -252,7 +304,7 @@
                 <label class="layui-form-label" style="width: 100px">管理服务部门</label>
                 <div class=" layui-input-inline">
                     <select id="bm" name="bm" lay-verify="required" lay-search lay-filter="bm">
-                        <option value=""></option>
+                        <!--<option value=""></option>-->
                         <!--<option value="船舶与海洋工程学院">船舶与海洋工程学院</option>-->
                         <!--<option value="机械工程学院">机械工程学院</option>-->
                         <!--<option value="能源与动力学院">能源与动力学院</option>-->
@@ -263,26 +315,37 @@
                 <label class="layui-form-label" style="width: 100px">教学科研单位</label>
                 <div class=" layui-input-inline">
                     <select id="ky" name="ky" lay-verify="required" lay-search lay-filter="ky">
-                        <option value=""></option>
-                        <!--<option value="船舶与海洋工程学院">船舶与海洋工程学院</option>-->
-                        <!--<option value="机械工程学院">机械工程学院</option>-->
-                        <!--<option value="能源与动力学院">能源与动力学院</option>-->
-                        <!--<option value="电子信息学院">电子信息学院</option>-->
-                        <!--<option value="计算机学院">计算机学院</option>-->
+                        <!--<option value=""></option>-->
                     </select>
                 </div>
-                <!--<input type="button" id="xzhydd" class="layui-btn " title="选择会议地点" value="搜索">-->
+                <input type="text" id="danwei" hidden>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px">职务</label>
+                <div class=" layui-input-inline">
+                    <select id="zw" name="zw" lay-verify="required" lay-search lay-filter="zw">
+                        <!--<option value=""></option>-->
+                    </select>
+                </div>
+                <label class="layui-form-label" style="width: 100px">职称</label>
+                <div class=" layui-input-inline">
+                    <select id="zc" name="zc" lay-verify="required" lay-search lay-filter="zc">
+                        <!--<option value=""></option>-->
+                    </select>
+                </div>
+                <!--<div class=" layui-input-inline">-->
+                <!--<select id="z" name="zc" lay-verify="required" lay-search lay-filter="zc">-->
+                <!--<option value=""></option>-->
+                <!--</select>-->
+                <!--</div>-->
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">可选人员</label>
             <div id="center" class="layui-input-block">
                 <!--<input type="checkbox" name="like[write]" title="韩斌" value="韩斌" lay-filter="renyuan">-->
-                <!--<input type="checkbox" name="like[read]" title="高尚" value="高尚" lay-filter="renyuan">-->
-                <!--<input type="checkbox" name="like[read]" title="吴健康" value="吴健康" lay-filter="renyuan">-->
-                <!--<input type="checkbox" name="like[read]" title="李秀明" value="李秀明" lay-filter="renyuan">-->
-                <!--<input type="checkbox" name="like[read]" title="周扬" value="周扬" lay-filter="renyuan">-->
-                <!--<input type="checkbox" name="like[read]" title="温大勇" value="温大勇" lay-filter="renyuan">-->
             </div>
         </div>
     </form>

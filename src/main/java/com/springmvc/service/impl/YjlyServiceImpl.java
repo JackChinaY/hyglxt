@@ -10,7 +10,7 @@ import com.springmvc.service.YjlyService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
 
 /**
  * 院记录员接口实现类
@@ -86,5 +86,79 @@ public class YjlyServiceImpl implements YjlyService {
     @Override
     public List<Worker> findDW(Worker worker) {
         return workerDao.findDW(worker);
+    }
+
+    /**
+     * 查询本单位所有存在的职务
+     */
+    @Override
+    public List<Worker> findZhiWuByDW(Worker worker) {
+        List<Worker> resultList = new ArrayList<>();//结果集
+        Set<String> tempSet = new HashSet<>();//临时集
+        List<Worker> workerList = workerDao.findZhiWuByDW(worker);//查询集
+        //遍历查询集
+        for (int i = 0; i < workerList.size(); i++) {
+            //如果该教职工的职务是唯一的
+            if (!workerList.get(i).getZhiwu().contains("/")) {
+                tempSet.add(workerList.get(i).getZhiwu());
+            }
+            //如果该教职工的职务不是唯一的，如：校长/校党委常委/校友会会长
+            else {
+                //分割该职务
+                String sourceStr = workerList.get(i).getZhiwu();
+                String[] sourceStrArray = sourceStr.split("/");
+                //将分割后的单独职务循环存入临时集
+                for (int j = 0; j < sourceStrArray.length; j++) {
+                    tempSet.add(sourceStrArray[j]);
+                }
+            }
+        }
+        //将临时集转成结果集
+        Iterator iterator = tempSet.iterator();
+        System.out.println(tempSet.size());
+        while (iterator.hasNext()) {
+            Worker w = new Worker();
+            String s = (String) iterator.next();
+            System.out.println("字符串：" + s);
+            w.setZhiwu(s.substring(1, s.length() - 1));
+            resultList.add(w);
+        }
+        return resultList;
+    }
+
+    /**
+     * 询本单位所有存在的职称
+     */
+    @Override
+    public List<Worker> findZhiChengByDW(Worker worker) {
+        List<Worker> resultList = new ArrayList<>();//结果集
+        Set<String> tempSet = new HashSet<>();//临时集
+        List<Worker> workerList = workerDao.findZhiChengByDW(worker);//查询集
+        //遍历查询集
+        for (int i = 0; i < workerList.size(); i++) {
+            //如果该教职工的职称是唯一的
+            if (!workerList.get(i).getZhicheng().contains("/")) {
+                tempSet.add(workerList.get(i).getZhicheng());
+            }
+            //如果该教职工的职称不是唯一的，如：讲师/教授
+            else {
+                //分割该职务
+                String sourceStr = workerList.get(i).getZhicheng();
+                String[] sourceStrArray = sourceStr.split("/");
+                //将分割后的单独职务循环存入结果集
+                for (int j = 0; j < sourceStrArray.length; j++) {
+                    tempSet.add(sourceStrArray[j]);
+                }
+            }
+        }
+        //将临时集转成结果集
+        Iterator iterator = tempSet.iterator();
+        while (iterator.hasNext()) {
+            Worker w = new Worker();
+            String s = (String) iterator.next();
+            w.setZhicheng(s.substring(1, s.length() - 1));
+            resultList.add(w);
+        }
+        return resultList;
     }
 }

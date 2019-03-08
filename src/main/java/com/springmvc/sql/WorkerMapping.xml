@@ -55,6 +55,12 @@
         SELECT *
         FROM worker
         WHERE danwei = #{danwei,jdbcType=VARCHAR}
+        <if test="zhiwu != '' and zhiwu != null">
+            AND zhiwu LIKE concat(concat('%',#{zhiwu,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="zhicheng != '' and zhicheng != null">
+            AND zhicheng LIKE concat(concat('%',#{zhicheng,jdbcType=VARCHAR}),'%')
+        </if>
         ORDER BY convert(substr(name, 1, 1) using 'GBK')
     </select>
 
@@ -66,6 +72,23 @@
         ORDER BY convert(substr(danwei, 1, 1) using 'GBK')
     </select>
 
+    <!-- 去重查询本单位所有存在的职务 -->
+    <select id="findZhiWuByDW" parameterType="com.springmvc.entity.Worker" resultMap="baseResultMap">
+        SELECT DISTINCT zhiwu
+        FROM worker
+        WHERE danwei = #{danwei,jdbcType=VARCHAR}
+          AND zhiwu != ''
+        ORDER BY convert(substr(zhiwu, 1, 1) using 'GBK')
+    </select>
+
+    <!-- 去重查询本单位所有存在的职称 -->
+    <select id="findZhiChengByDW" parameterType="com.springmvc.entity.Worker" resultMap="baseResultMap">
+        SELECT DISTINCT zhicheng
+        FROM worker
+        WHERE danwei = #{danwei,jdbcType=VARCHAR}
+          AND zhicheng != ''
+        ORDER BY convert(substr(zhicheng, 1, 1) using 'GBK')
+    </select>
 
     <!-- 查询会议总数 -->
     <select id="findCount" parameterType="com.springmvc.entity.User" resultType="java.lang.Integer">

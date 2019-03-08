@@ -53,4 +53,14 @@ public interface YjlyService {
      * 去重查询所有单位
      */
     List<Worker> findDW(Worker worker);
+
+    /**
+     * 查询本单位所有存在的职务
+     */
+    List<Worker> findZhiWuByDW(Worker worker);
+
+    /**
+     * 询本单位所有存在的职称
+     */
+    List<Worker> findZhiChengByDW(Worker worker);
 }

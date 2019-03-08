@@ -63,10 +63,10 @@ public class SystemController {
             flag = "1";//登录成功
             session.setAttribute("user", result);//在session中保存当前用户
 //            System.out.println(result.toString());
-            System.out.println("session:" + session.getAttribute("user").toString());
+//            System.out.println("session:" + session.getAttribute("user").toString());
         } else {
             flag = "0";//登录失败
-            System.out.println("无此用户");
+//            System.out.println("无此用户");
         }
         Map<String, Object> map = new HashMap<>();
         map.put("code", flag);
