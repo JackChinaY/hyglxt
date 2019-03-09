@@ -164,9 +164,9 @@
             $("#xzhydd").click(function () {
                 layer.open({
                     type: 2 //iframe
-                    , title: '选择与会人员'
+                    , title: '选择会议地点'
                     , area: ['80%', '90%']
-                    , content: 'yjly/yhry.html'
+                    , content: 'yjly/place.html?danwei=' + $.cookie("danwei")
                     , btn: ['确认', '取消']
                     , zIndex: layer.zIndex //重点1
                     , success: function (layero) {
@@ -175,8 +175,7 @@
                     , yes: function (index, layero) {//【确认】按钮回调函数
                         // 获取子页面DOM
                         var contents = $(layero).find("iframe").contents();
-                        // console.log($(contents).find("#yhry").val());
-                        $("#yhry").val($("#yhry").val() + "、" + $(contents).find("#yhry").val());
+                        $("#hydd").val($(contents).find("#hydd").val());
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
                     }
                     , btn2: function (index, layero) {//【取消】按钮回调函数
@@ -189,9 +188,9 @@
             $("#xzcbdw").click(function () {
                 layer.open({
                     type: 2 //iframe
-                    , title: '选择与会人员'
+                    , title: '选择承办单位'
                     , area: ['80%', '90%']
-                    , content: 'yjly/yhry.html'
+                    , content: 'yjly/place.html?danwei=' + $.cookie("danwei")
                     , btn: ['确认', '取消']
                     , zIndex: layer.zIndex //重点1
                     , success: function (layero) {
@@ -200,8 +199,7 @@
                     , yes: function (index, layero) {//【确认】按钮回调函数
                         // 获取子页面DOM
                         var contents = $(layero).find("iframe").contents();
-                        // console.log($(contents).find("#yhry").val());
-                        $("#yhry").val($("#yhry").val() + "、" + $(contents).find("#yhry").val());
+                        $("#cbdw").val($(contents).find("#cbdw").val());
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
                     }
                     , btn2: function (index, layero) {//【取消】按钮回调函数
@@ -251,7 +249,7 @@
                     </div>
                     <label class="layui-form-label">会议地点</label>
                     <div class=" layui-input-inline">
-                        <input type="text" name="hydd" placeholder="请输入会议地点" autocomplete="off" class="layui-input" style="display: inline">
+                        <input type="text" name="hydd" id="hydd" placeholder="请输入会议地点" autocomplete="off" class="layui-input" style="display: inline">
                     </div>
                     <input type="button" id="xzhydd" class="layui-btn layui-btn-primary" title="选择会议地点" value="...">
                 </div>
@@ -264,7 +262,7 @@
                     </div>
                     <label class="layui-form-label">承办单位</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="cbdw" placeholder="请输入承办单位" autocomplete="off" class="layui-input" style="display: inline">
+                        <input type="text" name="cbdw" id="cbdw" placeholder="请输入承办单位" autocomplete="off" class="layui-input" style="display: inline">
                     </div>
                     <input type="button" id="xzcbdw" class="layui-btn layui-btn-primary" title="选择承办单位" value="...">
                 </div>

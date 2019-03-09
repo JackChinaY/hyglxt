@@ -115,11 +115,11 @@ public class YjlyServiceImpl implements YjlyService {
         }
         //将临时集转成结果集
         Iterator iterator = tempSet.iterator();
-        System.out.println(tempSet.size());
+//        System.out.println(tempSet.size());
         while (iterator.hasNext()) {
             Worker w = new Worker();
             String s = (String) iterator.next();
-            System.out.println("字符串：" + s);
+//            System.out.println("字符串：" + s);
             w.setZhiwu(s.substring(1, s.length() - 1));
             resultList.add(w);
         }

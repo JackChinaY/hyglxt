@@ -2,7 +2,7 @@
 <html lang="ch">
 <head>
     <meta charset="UTF-8">
-    <title>选择与会人员</title>
+    <title>选择会议地点</title>
     <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
     <link rel="stylesheet" href="../plugs/layui/css/layui.css">
     <script src="../plugs/jquery/jquery-1.11.3.min.js"></script>
@@ -257,8 +257,7 @@
                     return result ? decodeURIComponent(result[2]) : null;
                 }
             }
-        )
-        ;
+        );
     </script>
     <style>
         html, body {
@@ -266,8 +265,6 @@
             margin: 0;
             font-family: Arial;
             font-size: 14px;
-            /*min-height: 500px;*/
-            /*min-width: 500px;*/
             width: 100%;
             height: 100%;
             overflow: auto;
@@ -278,12 +275,6 @@
 <body>
 <div style="margin: 10px" class=" layui-anim layui-anim-upbit">
     <form class="layui-form" lay-filter="default">
-        <div class="layui-form-item">
-            <label class="layui-form-label">与会人员</label>
-            <div class="layui-input-block">
-                <input type="text" id="yhry" class="layui-input">
-            </div>
-        </div>
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label" style="width: 100px;">管理服务部门</label>
@@ -301,27 +292,9 @@
                 <input type="text" id="danwei" hidden>
             </div>
         </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label" style="width: 100px;">职务</label>
-                <div class=" layui-input-inline">
-                    <select id="zw" name="zw" lay-verify="required" lay-search lay-filter="zw">
-                    </select>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label" style="width: 100px;">职称</label>
-                <div class=" layui-input-inline">
-                    <select id="zc" name="zc" lay-verify="required" lay-search lay-filter="zc">
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">可选人员</label>
-            <div id="center" class="layui-input-block">
-                <!--<input type="checkbox" name="like[write]" title="韩斌" value="韩斌" lay-filter="renyuan">-->
-            </div>
+        <!--表格-->
+        <div class="layui-card-body">
+            <table id="demo" lay-filter="table1"></table>
         </div>
     </form>
 </div>
