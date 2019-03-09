@@ -1,11 +1,9 @@
 package com.springmvc.service.impl;
 
+import com.springmvc.dao.PlaceDao;
 import com.springmvc.dao.WorkerDao;
 import com.springmvc.dao.YjlyDao;
-import com.springmvc.entity.Conference;
-import com.springmvc.entity.Page;
-import com.springmvc.entity.User;
-import com.springmvc.entity.Worker;
+import com.springmvc.entity.*;
 import com.springmvc.service.YjlyService;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +21,9 @@ public class YjlyServiceImpl implements YjlyService {
 
     @Resource
     private WorkerDao workerDao;
+
+    @Resource
+    private PlaceDao placeDao;
 
     /**
      * 分页查询所有会议
@@ -160,5 +161,13 @@ public class YjlyServiceImpl implements YjlyService {
             resultList.add(w);
         }
         return resultList;
+    }
+
+    /**
+     * 按单位查询所有会议室
+     */
+    @Override
+    public List<Place> findPlaceByDW(Place place) {
+        return placeDao.findPlaceByDW(place);
     }
 }

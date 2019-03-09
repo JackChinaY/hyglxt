@@ -11,8 +11,9 @@
     <script src="../js/common.js"></script>
     <script type="text/javascript">
         $(function () {
-                layui.use(['form'], function () {
+                layui.use(['form', 'table'], function () {
                     var form = layui.form;
+                    var table = layui.table;
 
                     /**
                      * 初始化页面数据
@@ -21,13 +22,12 @@
                         //加载下拉框内容
                         $.ajax({
                             type: "POST",
-                            url: projectName + "/yjly/findDW",
+                            url: projectName + "/yjly/findDWForHYDD",
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify({
-                                "danwei": getURLParameter("danwei")
+                                "dw": getURLParameter("danwei")
                             }),
                             dataType: "json",
-                            // async: true,
                             success: function (data) {
                                 //设置管理服务部门的下拉框内容
                                 if (data.count1 >= 0) {
@@ -45,36 +45,6 @@
                                     }
                                     $("#ky").html(html);
                                 }
-                                //设置职务下拉框内容
-                                if (data.count4 >= 0) {
-                                    var html = '<option value=""></option>';
-                                    for (var i = 0; i < data.count4; i++) {
-                                        html += '<option value="' + data.data4[i].zhiwu + '">' + data.data4[i].zhiwu + '</option>'
-                                    }
-                                    $("#zw").html(html);
-                                }
-                                //设置职称下拉框内容
-                                if (data.count5 >= 0) {
-                                    var html = '<option value=""></option>';
-                                    for (var i = 0; i < data.count5; i++) {
-                                        html += '<option value="' + data.data5[i].zhicheng + '">' + data.data5[i].zhicheng + '</option>'
-                                    }
-                                    $("#zc").html(html);
-                                }
-                                //设置本单位的下拉框内容
-                                if (data.count3 >= 0) {
-                                    var html = "";
-                                    for (var i = 0; i < data.count3; i++) {
-                                        if (data.data3[i].name.toString().length == 2) {
-                                            html += '<input type="checkbox" title="' + data.data3[i].name.substring(0, 1) + "&#8195;" + data.data3[i].name.substring(1, 2) + '" value="' + data.data3[i].name + '" lay-filter="renyuan">'
-                                        } else {
-                                            html += '<input type="checkbox" title="' + data.data3[i].name + '" value="' + data.data3[i].name + '" lay-filter="renyuan">'
-                                        }
-                                    }
-                                    $("#center").html(html);
-                                } else {
-                                    layer.msg('暂无数据');
-                                }
                                 form.render();//表单控件刷新
                                 $("#danwei").val(getURLParameter("danwei"));//临时保存当前单位的值
                                 //表单初始赋值
@@ -90,15 +60,37 @@
                     }
 
                     init();
+
                     /**
-                     * 选中或撤销选择
+                     * 表格初始化
                      */
-                    form.on('checkbox(renyuan)', function (data) {
-                        if (data.elem.checked == true) {
-                            $("#yhry").val($("#yhry").val() + data.value + " ");
-                        } else {
-                            $("#yhry").val($("#yhry").val().replace(data.value + " ", ""));
-                        }
+                    table.render({
+                        elem: '#table1',
+                        height: 'full-140',
+                        url: projectName + "/yjly/findPlaceByDW", //数据接口
+                        method: 'post',
+                        contentType: 'application/json',
+                        // page: true, //开启分页
+                        // limit: 10,//每页显示的条数
+                        // toolbar: '#bar1',//开启表格头部工具栏区域
+                        // toolbar: 'default',//开启表格头部工具栏区域
+                        where: {dw: getURLParameter("danwei")},
+                        skin: 'line', //行边框风格
+                        even: true,//开启隔行背景
+                        cols: [[ //表头
+                            {field: 'id', title: '序号', width: '7%', align: 'center', sort: true, type: 'numbers'},
+                            {field: 'id', title: 'ID', width: '0%', align: 'center', hide: true},
+                            {field: 'name', title: '会议地点', width: '15%', align: 'center', sort: true},
+                            {field: 'zws', title: '容纳人数', width: '10%', align: 'center', sort: true},
+                            {field: 'kt', title: '空调', width: '7%', align: 'center', sort: true},
+                            {field: 'tyy', title: '投影仪', width: '9%', align: 'center', sort: true},
+                            {field: 'mkf', title: '麦克风', width: '9%', align: 'center', sort: true},
+                            {field: 'yx', title: '音响', width: '7%', align: 'center', sort: true},
+                            {field: 'yjt', title: '演讲台', width: '9%', align: 'center', sort: true},
+                            {field: 'zm', title: '照明', width: '7%', align: 'center', sort: true},
+                            {field: 'dz', title: '地址', width: '9%', align: 'center', sort: true},
+                            {field: 'operation', title: '操作', width: '11%', align: 'center', toolbar: '#bar2'}
+                        ]],
                     });
                     /**
                      * 监听 管理服务部门 下拉框
@@ -118,134 +110,23 @@
                     });
 
                     /**
-                     *查询该单位下的教职工
+                     *查询该单位下的会议地点
                      */
                     function chaxun(data1) {
-                        $.ajax({
-                            type: "POST",
-                            url: projectName + "/yjly/findWorkersByDW",
-                            contentType: "application/json; charset=utf-8",
-                            data: JSON.stringify({
-                                "danwei": data1.value  //得到被选中的值
-                            }),
-                            dataType: "json",
-                            success: function (data) {
-                                //设置职务下拉框内容
-                                if (data.count4 >= 0) {
-                                    var html = '<option value=""></option>';
-                                    for (var i = 0; i < data.count4; i++) {
-                                        html += '<option value="' + data.data4[i].zhiwu + '">' + data.data4[i].zhiwu + '</option>'
-                                    }
-                                    $("#zw").html(html);
-                                }
-                                //设置职称下拉框内容
-                                if (data.count5 >= 0) {
-                                    var html = '<option value=""></option>';
-                                    for (var i = 0; i < data.count5; i++) {
-                                        html += '<option value="' + data.data5[i].zhicheng + '">' + data.data5[i].zhicheng + '</option>'
-                                    }
-                                    $("#zc").html(html);
-                                }
-                                if (data.count >= 0) {
-                                    var html = "";
-                                    for (var i = 0; i < data.count; i++) {
-                                        if (data.data[i].name.toString().length == 2) {
-                                            html += '<input type="checkbox" title="' + data.data[i].name.substring(0, 1) + "&#8195;" + data.data[i].name.substring(1, 2) + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                                        } else {
-                                            html += '<input type="checkbox" title="' + data.data[i].name + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                                        }
-                                    }
-                                    $("#center").html(html);
-                                } else {
-                                    layer.msg('暂无数据');
-                                }
-                                form.render();//表单控件刷新
-                            },
-                            error: function (jqXHR) {
-                                layer.msg('错误：' + jqXHR.status);
-                            }
+                        table.reload('table1', {
+                            url: projectName + "/yjly/findPlaceByDW", //数据接口
+                            where: {dw: data1.value}
                         });
                     }
 
-                    /**
-                     * 监听 职务 下拉框
-                     */
-                    form.on('select(zw)', function (data1) {
-                        $.ajax({
-                            type: "POST",
-                            url: projectName + "/yjly/findWorkersByDW",
-                            contentType: "application/json; charset=utf-8",
-                            data: JSON.stringify({
-                                "danwei": $("#danwei").val() //得到被选中的单位
-                                , "zhiwu": "<" + data1.value + ">"  //得到被选中的职务
-                            }),
-                            dataType: "json",
-                            success: function (data) {
-                                if (data.count >= 0) {
-                                    var html = '';
-                                    for (var i = 0; i < data.count; i++) {
-                                        if (data.data[i].name.toString().length == 2) {
-                                            html += '<input type="checkbox" title="' + data.data[i].name.substring(0, 1) + "&#8195;" + data.data[i].name.substring(1, 2) + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                                        } else {
-                                            html += '<input type="checkbox" title="' + data.data[i].name + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                                        }
-                                    }
-                                    $("#center").html(html);
-                                    form.render();//表单控件刷新
-                                    form.val("default", {"zc": ""});//下拉框设置默认选中项
-                                } else {
-                                    layer.msg('暂无数据');
-                                }
-                            },
-                            error: function (jqXHR) {
-                                layer.msg('错误：' + jqXHR.status);
-                            }
-                        });
-                    });
+                    //监听行工具事件
+                    table.on('tool(table1)', function (obj) { //注：tool是工具条事件名，table1是table原始容器的属性 lay-filter="对应的值"
+                        var data = obj.data; //获得当前行数据
+                        $("#hydd").val(data.name);
+                        console.log($("#hydd").val());
+                        layer.close(layer.index);
 
-                    /**
-                     * 监听 职称 下拉框
-                     */
-                    form.on('select(zc)', function (data1) {
-                        $.ajax({
-                            type: "POST",
-                            url: projectName + "/yjly/findWorkersByDW",
-                            contentType: "application/json; charset=utf-8",
-                            data: JSON.stringify({
-                                "danwei": $("#danwei").val() //得到被选中的单位
-                                , "zhicheng": "<" + data1.value + ">"  //得到被选中的职称
-                            }),
-                            dataType: "json",
-                            success: function (data) {
-                                if (data.count >= 0) {
-                                    var html = '';
-                                    for (var i = 0; i < data.count; i++) {
-                                        if (data.data[i].name.toString().length == 2) {
-                                            html += '<input type="checkbox" title="' + data.data[i].name.substring(0, 1) + "&#8195;" + data.data[i].name.substring(1, 2) + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                                        } else {
-                                            html += '<input type="checkbox" title="' + data.data[i].name + '" value="' + data.data[i].name + '" lay-filter="renyuan">'
-                                        }
-                                    }
-                                    $("#center").html(html);
-                                    form.render();////表单控件刷新
-                                    form.val("default", {"zw": ""});//下拉框设置默认选中项
-                                } else {
-                                    layer.msg('暂无数据');
-                                }
-                            },
-                            error: function (jqXHR) {
-                                layer.msg('错误：' + jqXHR.status);
-                            }
-                        });
                     });
-
-                    /**
-                     * 表单初始赋值
-                     */
-                    form.val("default", {
-                        "bm": getURLParameter("danwei")
-                        , "ky": getURLParameter("danwei")
-                    })
                 });
 
                 /**
@@ -275,6 +156,7 @@
 <body>
 <div style="margin: 10px" class=" layui-anim layui-anim-upbit">
     <form class="layui-form" lay-filter="default">
+        <input type="text" id="hydd" hidden>
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label" style="width: 100px;">管理服务部门</label>
@@ -294,8 +176,12 @@
         </div>
         <!--表格-->
         <div class="layui-card-body">
-            <table id="demo" lay-filter="table1"></table>
+            <table id="table1" lay-filter="table1"></table>
         </div>
+        <!--每行后面的可操作的按钮-->
+        <script type="text/html" id="bar2">
+            <a class="layui-btn layui-btn-xs" lay-event="xz">选择</a>
+        </script>
     </form>
 </div>
 </body>

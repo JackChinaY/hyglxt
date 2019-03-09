@@ -1,9 +1,6 @@
 package com.springmvc.controller;
 
-import com.springmvc.entity.Conference;
-import com.springmvc.entity.Page;
-import com.springmvc.entity.User;
-import com.springmvc.entity.Worker;
+import com.springmvc.entity.*;
 import com.springmvc.service.YjlyService;
 import com.springmvc.util.Users;
 import org.springframework.stereotype.Controller;
@@ -135,8 +132,10 @@ public class YjlyController extends Common {
     @ResponseBody//处理 AJAX请求，返回响应的内容，如json数据
     public Map<String, Object> findDW(@RequestBody Worker worker) {
 //        System.out.println("数据 :" + worker.toString());
+        //查询所有的管理服务部门
         worker.setLevel1("管理服务部门");
         List<Worker> result1 = yjlyService.findDW(worker);
+        //查询所有的教学科研单位
         worker.setLevel1("教学科研单位");
         List<Worker> result2 = yjlyService.findDW(worker);
         //查询本单位的教职工
@@ -158,6 +157,48 @@ public class YjlyController extends Common {
         map.put("data3", result3);
         map.put("data4", result4);
         map.put("data5", result5);
+        return map;
+    }
+
+    /**
+     * 去重查询所有单位 会议地点
+     */
+    @RequestMapping(value = "/findDWForHYDD", method = RequestMethod.POST)
+    @ResponseBody//处理 AJAX请求，返回响应的内容，如json数据
+    public Map<String, Object> findDWForHYDD(@RequestBody Place place) {
+        System.out.println("数据 :" + place.toString());
+        //按单位查询所有会议室
+        Worker worker = new Worker();
+        //查询所有的管理服务部门
+        worker.setLevel1("管理服务部门");
+        List<Worker> result1 = yjlyService.findDW(worker);
+        //查询所有的教学科研单位
+        worker.setLevel1("教学科研单位");
+        List<Worker> result2 = yjlyService.findDW(worker);
+//        System.out.println(result);
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", 0);//code，-1：登录失效；0：响应正常；
+        map.put("count1", result1.size());
+        map.put("count2", result2.size());
+        map.put("data1", result1);
+        map.put("data2", result2);
+        return map;
+    }
+
+    /**
+     * 按单位查询所有会议室
+     */
+    @RequestMapping(value = "/findPlaceByDW", method = RequestMethod.POST)
+    @ResponseBody//处理 AJAX请求，返回响应的内容，如json数据
+    public Map<String, Object> findPlaceByDW(@RequestBody Place place) {
+        System.out.println("数据 :" + place.toString());
+        //按单位查询所有会议室
+        List<Place> result = yjlyService.findPlaceByDW(place);
+//        System.out.println(result);
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", 0);//code，-1：登录失效；0：响应正常；
+        map.put("count", result.size());
+        map.put("data", result);
         return map;
     }
 }

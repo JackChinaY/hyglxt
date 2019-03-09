@@ -1,10 +1,7 @@
 package com.springmvc.service;
 
 
-import com.springmvc.entity.Conference;
-import com.springmvc.entity.Page;
-import com.springmvc.entity.User;
-import com.springmvc.entity.Worker;
+import com.springmvc.entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -60,7 +57,12 @@ public interface YjlyService {
     List<Worker> findZhiWuByDW(Worker worker);
 
     /**
-     * 询本单位所有存在的职称
+     * 查询本单位所有存在的职称
      */
     List<Worker> findZhiChengByDW(Worker worker);
+
+    /**
+     * 按单位查询所有会议室
+     */
+    List<Place> findPlaceByDW(Place place);
 }

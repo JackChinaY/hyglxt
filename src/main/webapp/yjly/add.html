@@ -96,12 +96,8 @@
                 //表单初始赋值
                 form.val('default', {
                     "jlyxm": $.cookie("username") // "name": "value"
-                    , "password": "123456"
-                    , "interest": 1
-                    , "like[write]": true //复选框选中状态
-                    , "close": true //开关状态
-                    , "sex": "女"
-                    , "desc": "我爱 layui"
+                    , "cbdw": $.cookie("danwei")
+
                 })
 
                 // form.on('submit(xzyhry)', function (data) {
@@ -165,7 +161,7 @@
                 layer.open({
                     type: 2 //iframe
                     , title: '选择会议地点'
-                    , area: ['80%', '90%']
+                    , area: ['90%', '90%']
                     , content: 'yjly/place.html?danwei=' + $.cookie("danwei")
                     , btn: ['确认', '取消']
                     , zIndex: layer.zIndex //重点1
