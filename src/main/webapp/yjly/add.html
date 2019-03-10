@@ -29,7 +29,7 @@
             };
 
             layui.use(['form', 'layedit', 'laydate'], function () {
-                var form = layui.form, layer = layui.layer, layedit = layui.layedit, laydate = layui.laydate;
+                var form = layui.form, layedit = layui.layedit, laydate = layui.laydate;
 
                 //开始时间
                 laydate.render({
@@ -98,7 +98,7 @@
                     "jlyxm": $.cookie("username") // "name": "value"
                     , "cbdw": $.cookie("danwei")
 
-                })
+                });
 
                 // form.on('submit(xzyhry)', function (data) {
                 //     layer.open({
@@ -128,80 +128,73 @@
                 //     });
                 //     // return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
                 // });
+
+                /**
+                 * 选择与会人员
+                 */
+                $("#xzyhry").click(function () {
+                    layer.open({
+                        type: 2 //iframe
+                        , title: '选择与会人员'
+                        , area: ['80%', '90%']
+                        , content: 'yjly/yhry.html?danwei=' + $.cookie("danwei")
+                        , btn: ['确认', '取消']
+                        , zIndex: layer.zIndex //重点1
+                        , success: function (layero) {
+                            layer.setTop(layero); //重点2
+                        }
+                        , yes: function (index, layero) {//【确认】按钮回调函数
+                            // 获取子页面DOM
+                            var contents = $(layero).find("iframe").contents();
+                            // console.log($(contents).find("#yhry").val());
+                            $("#yhry").val($("#yhry").val() + $(contents).find("#yhry").val());
+                            layer.close(index); //如果设定了yes回调，需进行手工关闭
+                        }
+                        , btn2: function (index, layero) {//【取消】按钮回调函数
+                        }
+                    });
+                });
+                /**
+                 * 选择会议地点
+                 */
+                $("#xzhydd").click(function () {
+                    layer.open({
+                        type: 2 //iframe
+                        , title: '选择会议地点'
+                        , area: ['90%', '90%']
+                        , content: 'yjly/place.html?danwei=' + $.cookie("danwei")
+                        // , btn: ['确认', '取消']
+                        , zIndex: layer.zIndex //重点1
+                        , success: function (layero) {
+                            layer.setTop(layero); //重点2
+                        }
+                    });
+                });
+                /**
+                 * 选择承办单位
+                 */
+                $("#xzcbdw").click(function () {
+                    layer.open({
+                        type: 2 //iframe
+                        , title: '选择承办单位'
+                        , area: ['60%', '80%']
+                        , content: 'yjly/unit.html?danwei=' + $("#cbdw").val()
+                        , btn: ['确认', '取消']
+                        , zIndex: layer.zIndex //重点1
+                        , success: function (layero) {
+                            layer.setTop(layero); //重点2
+                        }
+                        , yes: function (index, layero) {//【确认】按钮回调函数
+                            // 获取子页面DOM
+                            var contents = $(layero).find("iframe").contents();
+                            $("#cbdw").val($(contents).find("#danwei").val());
+                            layer.close(index); //如果设定了yes回调，需进行手工关闭
+                        }
+                        , btn2: function (index, layero) {//【取消】按钮回调函数
+                        }
+                    });
+                });
             });
-            /**
-             * 选择与会人员
-             */
-            $("#xzyhry").click(function () {
-                layer.open({
-                    type: 2 //iframe
-                    , title: '选择与会人员'
-                    , area: ['80%', '90%']
-                    , content: 'yjly/yhry.html?danwei=' + $.cookie("danwei")
-                    , btn: ['确认', '取消']
-                    , zIndex: layer.zIndex //重点1
-                    , success: function (layero) {
-                        layer.setTop(layero); //重点2
-                    }
-                    , yes: function (index, layero) {//【确认】按钮回调函数
-                        // 获取子页面DOM
-                        var contents = $(layero).find("iframe").contents();
-                        // console.log($(contents).find("#yhry").val());
-                        $("#yhry").val($("#yhry").val() + $(contents).find("#yhry").val());
-                        layer.close(index); //如果设定了yes回调，需进行手工关闭
-                    }
-                    , btn2: function (index, layero) {//【取消】按钮回调函数
-                    }
-                });
-            })
-            /**
-             * 选择会议地点
-             */
-            $("#xzhydd").click(function () {
-                layer.open({
-                    type: 2 //iframe
-                    , title: '选择会议地点'
-                    , area: ['90%', '90%']
-                    , content: 'yjly/place.html?danwei=' + $.cookie("danwei")
-                    , btn: ['确认', '取消']
-                    , zIndex: layer.zIndex //重点1
-                    , success: function (layero) {
-                        layer.setTop(layero); //重点2
-                    }
-                    , yes: function (index, layero) {//【确认】按钮回调函数
-                        // 获取子页面DOM
-                        var contents = $(layero).find("iframe").contents();
-                        $("#hydd").val($(contents).find("#hydd").val());
-                        layer.close(index); //如果设定了yes回调，需进行手工关闭
-                    }
-                    , btn2: function (index, layero) {//【取消】按钮回调函数
-                    }
-                });
-            })
-            /**
-             * 选择承办单位
-             */
-            $("#xzcbdw").click(function () {
-                layer.open({
-                    type: 2 //iframe
-                    , title: '选择承办单位'
-                    , area: ['80%', '90%']
-                    , content: 'yjly/place.html?danwei=' + $.cookie("danwei")
-                    , btn: ['确认', '取消']
-                    , zIndex: layer.zIndex //重点1
-                    , success: function (layero) {
-                        layer.setTop(layero); //重点2
-                    }
-                    , yes: function (index, layero) {//【确认】按钮回调函数
-                        // 获取子页面DOM
-                        var contents = $(layero).find("iframe").contents();
-                        $("#cbdw").val($(contents).find("#cbdw").val());
-                        layer.close(index); //如果设定了yes回调，需进行手工关闭
-                    }
-                    , btn2: function (index, layero) {//【取消】按钮回调函数
-                    }
-                });
-            })
         });
     </script>
     <style>
@@ -241,11 +234,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">开始时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="yhsj" id="kssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
+                        <input type="text" name="yhsj" id="kssj" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input">
                     </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">会议地点</label>
                     <div class=" layui-input-inline">
-                        <input type="text" name="hydd" id="hydd" placeholder="请输入会议地点" autocomplete="off" class="layui-input" style="display: inline">
+                        <input type="text" name="hydd" id="hydd" placeholder="请输入会议地点" class="layui-input" style="display: inline"/>
                     </div>
                     <input type="button" id="xzhydd" class="layui-btn layui-btn-primary" title="选择会议地点" value="...">
                 </div>
@@ -256,6 +251,8 @@
                     <div class="layui-input-inline">
                         <input type="text" name="yhsj" id="jssj" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input">
                     </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">承办单位</label>
                     <div class="layui-input-inline">
                         <input type="text" name="cbdw" id="cbdw" placeholder="请输入承办单位" autocomplete="off" class="layui-input" style="display: inline">
@@ -276,6 +273,8 @@
                             <option value="其他">其他</option>
                         </select>
                     </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">会议分类</label>
                     <div class="layui-input-inline">
                         <select name="hyfl" lay-search>
@@ -291,6 +290,8 @@
                             <option value="其他">其他</option>
                         </select>
                     </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">会议属性</label>
                     <div class="layui-input-inline">
                         <select name="hysx" lay-search>

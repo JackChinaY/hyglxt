@@ -76,21 +76,21 @@
                         // toolbar: 'default',//开启表格头部工具栏区域
                         where: {dw: getURLParameter("danwei")},
                         skin: 'line', //行边框风格
-                        even: true,//开启隔行背景
+                        // even: true,//开启隔行背景
                         cols: [[ //表头
                             {field: 'id', title: '序号', width: '7%', align: 'center', sort: true, type: 'numbers'},
                             {field: 'id', title: 'ID', width: '0%', align: 'center', hide: true},
                             {field: 'name', title: '会议地点', width: '15%', align: 'center', sort: true},
                             {field: 'zws', title: '容纳人数', width: '10%', align: 'center', sort: true},
-                            {field: 'kt', title: '空调', width: '7%', align: 'center', sort: true},
-                            {field: 'tyy', title: '投影仪', width: '9%', align: 'center', sort: true},
-                            {field: 'mkf', title: '麦克风', width: '9%', align: 'center', sort: true},
-                            {field: 'yx', title: '音响', width: '7%', align: 'center', sort: true},
-                            {field: 'yjt', title: '演讲台', width: '9%', align: 'center', sort: true},
-                            {field: 'zm', title: '照明', width: '7%', align: 'center', sort: true},
+                            {field: 'kt', title: '空调', width: '7%', align: 'center', sort: true, templet: kt},
+                            {field: 'tyy', title: '投影仪', width: '9%', align: 'center', sort: true, templet: tyy},
+                            {field: 'mkf', title: '麦克风', width: '9%', align: 'center', sort: true, templet: mkf},
+                            {field: 'yx', title: '音响', width: '7%', align: 'center', sort: true, templet: yx},
+                            {field: 'yjt', title: '演讲台', width: '9%', align: 'center', sort: true, templet: yjt},
+                            {field: 'zm', title: '照明', width: '7%', align: 'center', sort: true, templet: zm},
                             {field: 'dz', title: '地址', width: '9%', align: 'center', sort: true},
-                            {field: 'operation', title: '操作', width: '11%', align: 'center', toolbar: '#bar2'}
-                        ]],
+                            {field: 'operation', title: '操作', align: 'center', toolbar: '#bar2'}
+                        ]]
                     });
                     /**
                      * 监听 管理服务部门 下拉框
@@ -119,14 +119,71 @@
                         });
                     }
 
-                    //监听行工具事件
+                    /**
+                     *监听行工具事件
+                     */
                     table.on('tool(table1)', function (obj) { //注：tool是工具条事件名，table1是table原始容器的属性 lay-filter="对应的值"
                         var data = obj.data; //获得当前行数据
                         $("#hydd").val(data.name);
-                        console.log($("#hydd").val());
-                        layer.close(layer.index);
+                        $('#hydd', parent.frames["iframe_body"].document).val($("#hydd").val());
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
 
                     });
+
+                    //空调字段的样式
+                    function kt(d) {
+                        if (d.kt == "有") {
+                            return '<span class="layui-badge layui-bg-green">' + d.kt + '</span>'
+                        } else {
+                            return '<span class="layui-badge layui-bg-gray">' + d.kt + '</span>'
+                        }
+                    }
+
+                    //投影仪字段的样式
+                    function tyy(d) {
+                        if (d.tyy == "有") {
+                            return '<span class="layui-badge layui-bg-green">' + d.tyy + '</span>'
+                        } else {
+                            return '<span class="layui-badge layui-bg-gray">' + d.tyy + '</span>'
+                        }
+                    }
+
+                    //麦克风字段的样式
+                    function mkf(d) {
+                        if (d.mkf == "有") {
+                            return '<span class="layui-badge layui-bg-green">' + d.mkf + '</span>'
+                        } else {
+                            return '<span class="layui-badge layui-bg-gray">' + d.mkf + '</span>'
+                        }
+                    }
+
+                    //音响字段的样式
+                    function yx(d) {
+                        if (d.yx == "有") {
+                            return '<span class="layui-badge layui-bg-green">' + d.yx + '</span>'
+                        } else {
+                            return '<span class="layui-badge layui-bg-gray">' + d.yx + '</span>'
+                        }
+                    }
+
+                    //演讲台字段的样式
+                    function yjt(d) {
+                        if (d.yjt == "有") {
+                            return '<span class="layui-badge layui-bg-green">' + d.yjt + '</span>'
+                        } else {
+                            return '<span class="layui-badge layui-bg-gray">' + d.yjt + '</span>'
+                        }
+                    }
+
+                    //照明设备字段的样式
+                    function zm(d) {
+                        if (d.zm == "有") {
+                            return '<span class="layui-badge layui-bg-green">' + d.zm + '</span>'
+                        } else {
+                            return '<span class="layui-badge layui-bg-gray">' + d.zm + '</span>'
+                        }
+                    }
                 });
 
                 /**
@@ -141,16 +198,6 @@
         );
     </script>
     <style>
-        html, body {
-            padding: 0;
-            margin: 0;
-            font-family: Arial;
-            font-size: 14px;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            overflow-x: auto;
-        }
     </style>
 </head>
 <body>
@@ -158,6 +205,7 @@
     <form class="layui-form" lay-filter="default">
         <input type="text" id="hydd" hidden>
         <div class="layui-form-item">
+            <!--管理服务部门下拉框-->
             <div class="layui-inline">
                 <label class="layui-form-label" style="width: 100px;">管理服务部门</label>
                 <div class=" layui-input-inline">
@@ -165,6 +213,7 @@
                     </select>
                 </div>
             </div>
+            <!--教学科研单位下拉框-->
             <div class="layui-inline">
                 <label class="layui-form-label" style="width: 100px;">教学科研单位</label>
                 <div class=" layui-input-inline">
@@ -180,7 +229,7 @@
         </div>
         <!--每行后面的可操作的按钮-->
         <script type="text/html" id="bar2">
-            <a class="layui-btn layui-btn-xs" lay-event="xz">选择</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="xz">选择</a>
         </script>
     </form>
 </div>

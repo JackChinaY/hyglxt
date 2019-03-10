@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
+    <link rel="stylesheet" href="../plugs/layui/css/layui.css">
+    <script src="../plugs/jquery/jquery-1.11.3.min.js"></script>
+    <script src="../plugs/jquery/jquery.cookie.js"></script>
+    <script src="../plugs/layui/layui.js"></script>
+    <script src="../js/common.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            // layui.use('layer', function () {
+
+                $("#form1").click(function () {
+                    console.log(parent.$('#a').val());
+                    parent.$('#a').val("asd");
+                    console.log(parent.$('#a').val());
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                });
+            });
+        // });
+    </script>
+
+</head>
+<body>
+<button class="layui-btn" id="form1">立即提交</button>
+</body>
+</html>

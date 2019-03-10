@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>选择承办单位</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../plugs/image/favicon.ico"/>
+    <link rel="stylesheet" href="../plugs/layui/css/layui.css">
+    <script src="../plugs/jquery/jquery-1.11.3.min.js"></script>
+    <script src="../plugs/jquery/jquery.cookie.js"></script>
+    <script src="../plugs/layui/layui.js"></script>
+    <script src="../js/common.js"></script>
+    <script type="text/javascript">
+        $(function () {
+                layui.use(['form', 'table'], function () {
+                    var form = layui.form;
+
+                    /**
+                     * 初始化页面数据
+                     */
+                    function init() {
+                        //加载下拉框内容
+                        $.ajax({
+                            type: "POST",
+                            url: projectName + "/yjly/findDWForHYDD",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({
+                                "dw": getURLParameter("danwei")
+                            }),
+                            dataType: "json",
+                            success: function (data) {
+                                //设置管理服务部门的下拉框内容
+                                if (data.count1 >= 0) {
+                                    var html = '<option value=""></option>';
+                                    for (var i = 0; i < data.count1; i++) {
+                                        html += '<option value="' + data.data1[i].danwei + '">' + data.data1[i].danwei + '</option>'
+                                    }
+                                    $("#bm").html(html);
+                                }
+                                //设置教学科研单位的下拉框内容
+                                if (data.count2 >= 0) {
+                                    var html = '<option value=""></option>';
+                                    for (var i = 0; i < data.count2; i++) {
+                                        html += '<option value="' + data.data2[i].danwei + '">' + data.data2[i].danwei + '</option>'
+                                    }
+                                    $("#ky").html(html);
+                                }
+                                form.render();//表单控件刷新
+                                $("#danwei").val(getURLParameter("danwei"));//临时保存当前单位的值
+                                //表单初始赋值
+                                form.val("default", {
+                                    "bm": getURLParameter("danwei")   //当前单位的值
+                                    , "ky": getURLParameter("danwei") //当前单位的值
+                                })
+                            },
+                            error: function (jqXHR) {
+                                layer.msg('错误：' + jqXHR.status);
+                            }
+                        });
+                    }
+
+                    init();
+
+                    /**
+                     * 监听 管理服务部门 下拉框
+                     */
+                    form.on('select(bm)', function (data1) {
+                        form.val("default", {"ky": ""});
+                        $("#danwei").val(data1.value);//标记当前选定单位
+                    });
+                    /**
+                     * 监听 教学科研单位 下拉框
+                     */
+                    form.on('select(ky)', function (data1) {
+                        form.val("default", {"bm": ""});
+                        $("#danwei").val(data1.value);//标记当前选定单位
+                    });
+                });
+
+                /**
+                 * 获取URL中参数 key:要获取的的参数名
+                 */
+                function getURLParameter(key) {
+                    var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+                    var result = window.location.search.substr(1).match(reg);
+                    return result ? decodeURIComponent(result[2]) : null;
+                }
+            }
+        );
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+<div style="margin: 10px" class=" layui-anim layui-anim-upbit">
+    <form class="layui-form" lay-filter="default">
+        <input type="text" id="hydd" hidden>
+        <div class="layui-form-item">
+            <!--管理服务部门下拉框-->
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">管理服务部门</label>
+                <div class=" layui-input-inline">
+                    <select id="bm" name="bm" lay-verify="required" lay-search lay-filter="bm">
+                    </select>
+                </div>
+            </div>
+            <!--教学科研单位下拉框-->
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 100px;">教学科研单位</label>
+                <div class=" layui-input-inline">
+                    <select id="ky" name="ky" lay-verify="required" lay-search lay-filter="ky">
+                    </select>
+                </div>
+                <input type="text" id="danwei" hidden>
+            </div>
+        </div>
+        <!--表格-->
+        <div class="layui-card-body">
+            <table id="table1" lay-filter="table1"></table>
+        </div>
+        <!--每行后面的可操作的按钮-->
+        <script type="text/html" id="bar2">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="xz">选择</a>
+        </script>
+    </form>
+</div>
+</body>
+</html>

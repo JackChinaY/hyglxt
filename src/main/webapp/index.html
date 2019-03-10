@@ -23,7 +23,7 @@
                 if ($.cookie("username") != null) {
                     $("#successlogin").html($.cookie("danwei") + '  ' + $.cookie("username") + '  ');
                 } else {
-                    location.href = "login";
+                    // location.href = "login";
                 }
             }
 
@@ -213,8 +213,8 @@
                     <a class="" href="javascript:;">会议管理</a>
                     <dl class="layui-nav-child">
                         <!--<dd><a href="javascript:;" lay-href="ybsy/all.html">全部</a></dd>-->
-                        <dd class="layui-this"><a href="yjly/all.html" target="body">首页</a></dd>
-                        <dd><a href="yjly/add.html" target="body">会议预约</a></dd>
+                        <dd class="layui-this"><a href="yjly/all.html" target="iframe_body">首页</a></dd>
+                        <dd><a href="yjly/add.html" target="iframe_body">会议预约</a></dd>
                         <dd><a href="javascript:;">已预约会议<span class="layui-badge">6</span></a></dd>
                         <dd><a href="javascript:;">未提交审核<span class="layui-badge">3</span></a></dd>
                         <dd><a href="javascript:;">已完结</a></dd>
@@ -232,7 +232,7 @@
     </div>
     <!-- 内容主体区域 -->
     <div class="layui-body" style="bottom: 0;overflow: hidden;background: #f0f0f0">
-        <iframe name="body" width="100%" height="100%" frameborder="0" src="yjly/all.html" style="overflow: hidden">
+        <iframe name="iframe_body" width="100%" height="100%" frameborder="0" src="yjly/all.html" style="overflow: hidden">
         </iframe>
     </div>
 </div>
