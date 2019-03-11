@@ -130,6 +130,47 @@
                 // });
 
                 /**
+                 * 初始化页面数据
+                 */
+                function init() {
+                    //加载下拉框内容
+                    $.ajax({
+                        type: "POST",
+                        url: projectName + "/yjly/findAllProperty",
+                        contentType: "application/json; charset=utf-8",
+                        // data: JSON.stringify({
+                        //     "dw": getURLParameter("danwei")
+                        // }),
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.count >= 0) {
+                                var html1 = '<option value=""></option>';
+                                var html2 = '<option value=""></option>';
+                                var html3 = '<option value=""></option>';
+                                for (var i = 0; i < data.count; i++) {
+                                    if (data.data[i].key == "会议级别") {
+                                        html1 += '<option value="' + data.data[i].value + '">' + data.data[i].value + '</option>'
+                                    } else if (data.data[i].key == "会议分类") {
+                                        html2 += '<option value="' + data.data[i].value + '">' + data.data[i].value + '</option>'
+                                    } else if (data.data[i].key == "会议属性") {
+                                        html3 += '<option value="' + data.data[i].value + '">' + data.data[i].value + '</option>'
+                                    }
+                                }
+                                $("#hyjb").html(html1);//设置会议级别的下拉框内容
+                                $("#hyfl").html(html2);//设置会议分类的下拉框内容
+                                $("#hysx").html(html3);//设置会议属性的下拉框内容
+                            }
+                            form.render();//表单控件刷新
+                        },
+                        error: function (jqXHR) {
+                            layer.msg('错误：' + jqXHR.status);
+                        }
+                    });
+                }
+
+                // init();
+
+                /**
                  * 选择与会人员
                  */
                 $("#xzyhry").click(function () {
@@ -194,22 +235,61 @@
                         }
                     });
                 });
+
+                var yiti = ["议题二", "议题三", "议题四", "议题五", "议题六", "议题七", "议题八", "议题九", "议题十"];
+                var p = 0;
+                /**
+                 * 增加议题
+                 */
+                $("#zjyt").click(function () {
+                    if (p <= 8) {
+                        var html =
+                            '<div class="layui-form-item">' +
+                            '<label class="layui-form-label">' + yiti[p++] + '</label>' +
+                            '<div class="layui-input-block">' +
+                            '<input type="text" name="yt" placeholder="请输入议题" class="layui-input" style="display: inline;width: 92%">' +
+                            '  <button type="button" name="rm" class="layui-btn layui-btn-primary" title="删除该议题" style=" margin-bottom: 3px"><i class="layui-icon layui-icon-close"></i></button>' +
+                            '</div>' +
+                            '</div>';
+                        $("#ytq").append(html);//设置会议级别的下拉框内容
+                        form.render();//表单控件刷新
+                        // 为新元素节点添加事件侦听器
+                        bindListener(p);
+                    } else {
+                        layer.msg('最多只能创建10个议题');
+                    }
+                    return false;
+                });
+
+                // 用来绑定事件(使用unbind避免重复绑定)
+                function bindListener(d) {
+                    if (d == p) {
+                        $("button[name=rm]").unbind().click(function () {
+                            $(this).parents(".layui-form-item").remove();
+                            p--;
+                        });
+                    }
+
+                    return false;
+                }
             });
+
+
         });
     </script>
     <style>
-        html, body {
-            padding: 0;
-            margin: 0;
-            font-family: Arial;
-            font-size: 14px;
-            /*min-height: 500px;*/
-            /*min-width: 500px;*/
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            overflow-x: auto;
-        }
+        /*html, body {*/
+        /*padding: 0;*/
+        /*margin: 0;*/
+        /*font-family: Arial;*/
+        /*font-size: 14px;*/
+        /*!*min-height: 500px;*!*/
+        /*!*min-width: 500px;*!*/
+        /*width: 100%;*/
+        /*height: 100%;*/
+        /*overflow: auto;*/
+        /*overflow-x: auto;*/
+        /*}*/
     </style>
 </head>
 <body>
@@ -226,8 +306,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">与会人员</label>
                 <div class="layui-input-block">
-                    <input type="text" id="yhry" name="yhry" placeholder="请输入与会人员" class="layui-input" style="display: inline; width: 93%">
-                    <input type="button" id="xzyhry" class="layui-btn layui-btn-primary" title="选择与会人员" value="..." style="margin-bottom: 3px">
+                    <input type="text" id="yhry" name="yhry" placeholder="请输入与会人员" class="layui-input" style="display: inline;width: 93%">
+                    <input type="button" id="xzyhry" class="layui-btn layui-btn-primary" title="选择与会人员" value="..." style=" margin-bottom: 3px">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -264,47 +344,57 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">会议级别</label>
                     <div class="layui-input-inline">
-                        <select name="hyjb" lay-verify="required" lay-search>
-                            <option value="无">直接选择或搜索选择</option>
-                            <option value="校级">校级</option>
-                            <option value="院级">院级</option>
-                            <option value="系部">系部</option>
-                            <option value="支部">支部</option>
-                            <option value="其他">其他</option>
+                        <select id="hyjb" name="hyjb" lay-verify="required" lay-search>
+                            <!--<option value="无">直接选择或搜索选择</option>-->
+                            <!--<option value="校级">校级</option>-->
+                            <!--<option value="院级">院级</option>-->
+                            <!--<option value="系部">系部</option>-->
+                            <!--<option value="支部">支部</option>-->
+                            <!--<option value="其他">其他</option>-->
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">会议分类</label>
                     <div class="layui-input-inline">
-                        <select name="hyfl" lay-search>
-                            <option value="无">直接选择或搜索选择</option>
-                            <option value="党委会">党委会</option>
-                            <option value="党委中心组学习会">党委中心组学习会</option>
-                            <option value="办公会">办公会</option>
-                            <option value="民主生活会">民主生活会</option>
-                            <option value="专题会">专题会</option>
-                            <option value="党政联席会">党政联席会</option>
-                            <option value="系部会议">系部会议</option>
-                            <option value="党支部会议">党支部会议</option>
-                            <option value="其他">其他</option>
+                        <select id="hyfl" name="hyfl" lay-search>
+                            <!--<option value="无">直接选择或搜索选择</option>-->
+                            <!--<option value="党委会">党委会</option>-->
+                            <!--<option value="党委中心组学习会">党委中心组学习会</option>-->
+                            <!--<option value="办公会">办公会</option>-->
+                            <!--<option value="民主生活会">民主生活会</option>-->
+                            <!--<option value="专题会">专题会</option>-->
+                            <!--<option value="党政联席会">党政联席会</option>-->
+                            <!--<option value="系部会议">系部会议</option>-->
+                            <!--<option value="党支部会议">党支部会议</option>-->
+                            <!--<option value="其他">其他</option>-->
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">会议属性</label>
                     <div class="layui-input-inline">
-                        <select name="hysx" lay-search>
-                            <option value="无">直接选择或搜索选择</option>
-                            <option value="工作布置">工作布置</option>
-                            <option value="工作决策">工作决策</option>
-                            <option value="业务学习">业务学习</option>
-                            <option value="政治学习">政治学习</option>
-                            <option value="专项活动">专项活动</option>
-                            <option value="其他">其他</option>
+                        <select id="hysx" name="hysx" lay-search>
+                            <!--<option value="无">直接选择或搜索选择</option>-->
+                            <!--<option value="工作布置">工作布置</option>-->
+                            <!--<option value="工作决策">工作决策</option>-->
+                            <!--<option value="业务学习">业务学习</option>-->
+                            <!--<option value="政治学习">政治学习</option>-->
+                            <!--<option value="专项活动">专项活动</option>-->
+                            <!--<option value="其他">其他</option>-->
                         </select>
                     </div>
                 </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">议题一</label>
+                <div class="layui-input-block">
+                    <input type="text" id="yt" name="yt" placeholder="请输入议题" class="layui-input" style="display: inline;width: 92%">
+                    <button id="zjyt" class="layui-btn layui-btn-primary" title="增加一个议题" style=" margin-bottom: 3px"><i class="layui-icon layui-icon-add-circle"></i></button>
+                </div>
+            </div>
+            <div id="ytq">
+
             </div>
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">会议正文</label>

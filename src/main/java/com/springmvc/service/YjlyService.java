@@ -65,4 +65,10 @@ public interface YjlyService {
      * 按单位查询所有会议室
      */
     List<Place> findPlaceByDW(Place place);
+
+    /**
+     * 查询所有配置项
+     */
+    List<Property> findAllProperty();
+
 }

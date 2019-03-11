@@ -95,7 +95,7 @@ public class SystemController {
     public void loginOut(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (session == null) {
         } else {
-            session.removeAttribute("username");
+            session.removeAttribute("user");
             session.invalidate();//清除session
             System.out.println("清除session成功");
         }

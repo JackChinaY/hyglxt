@@ -164,7 +164,7 @@ public class YjlyController extends Common {
      * 去重查询所有单位 会议地点
      */
     @RequestMapping(value = "/findDWForHYDD", method = RequestMethod.POST)
-    @ResponseBody//处理 AJAX请求，返回响应的内容，如json数据
+    @ResponseBody
     public Map<String, Object> findDWForHYDD(@RequestBody Place place) {
         System.out.println("数据 :" + place.toString());
         //按单位查询所有会议室
@@ -175,7 +175,6 @@ public class YjlyController extends Common {
         //查询所有的教学科研单位
         worker.setLevel1("教学科研单位");
         List<Worker> result2 = yjlyService.findDW(worker);
-//        System.out.println(result);
         Map<String, Object> map = new HashMap<>();
         map.put("code", 0);//code，-1：登录失效；0：响应正常；
         map.put("count1", result1.size());
@@ -189,12 +188,27 @@ public class YjlyController extends Common {
      * 按单位查询所有会议室
      */
     @RequestMapping(value = "/findPlaceByDW", method = RequestMethod.POST)
-    @ResponseBody//处理 AJAX请求，返回响应的内容，如json数据
+    @ResponseBody
     public Map<String, Object> findPlaceByDW(@RequestBody Place place) {
         System.out.println("数据 :" + place.toString());
         //按单位查询所有会议室
         List<Place> result = yjlyService.findPlaceByDW(place);
-//        System.out.println(result);
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", 0);//code，-1：登录失效；0：响应正常；
+        map.put("count", result.size());
+        map.put("data", result);
+        return map;
+    }
+
+    /**
+     * 查询所有配置项
+     */
+    @RequestMapping(value = "/findAllProperty", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> findAllProperty() {
+
+        //按单位查询所有会议室
+        List<Property> result = yjlyService.findAllProperty();
         Map<String, Object> map = new HashMap<>();
         map.put("code", 0);//code，-1：登录失效；0：响应正常；
         map.put("count", result.size());

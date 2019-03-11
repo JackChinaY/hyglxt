@@ -29,10 +29,78 @@
             });
         });
     </script>
+    <style>
+        /*html, body {*/
+        /*padding: 0;*/
+        /*margin: 0;*/
+        /*font-family: Arial;*/
+        /*font-size: 14px;*/
+        /*!*min-height: 500px;*!*/
+        /*!*min-width: 500px;*!*/
+        /*width: 100%;*/
+        /*height: 100%;*/
+        /*overflow: auto;*/
+        /*overflow-x: auto;*/
+        /*}*/
+        .layui-input2 {
+            height: 38px;
+            line-height: 1.3;
+            line-height: 38px \9;
+            border-width: 1px;
+            border-style: solid;
+            background-color: #fff;
+            border-radius: 2px;
+            display: inline;
+            width: 100%;
+            padding-left: 10px;
+            outline: 0;
+            -webkit-appearance: none;
+            transition: all .3s;
+            -webkit-transition: all .3s;
+            box-sizing: border-box;
+            border-color: #e6e6e6;
+            float: left;
+        }
 
+        .layui-input2:hover {
+            border-color: #D2D2D2 !important
+        }
+
+        .layui-input2:focus {
+            border-color: #C9C9C9 !important
+        }
+
+        .layui-input-block2 {
+            position: relative;
+            margin-left: 110px;
+            margin-right: 70px;
+            min-height: 36px;
+        }
+    </style>
 </head>
 <body>
-<input class="layui-input" id="a"/>
-<button class="layui-btn" id="form1">立即提交</button>
+<!--<input class="layui-input" id="a"/>-->
+<!--<button class="layui-btn" id="form1">立即提交</button>-->
+<div class="layui-form-item">
+    <label class="layui-form-label">与会人员</label>
+    <div class="layui-input-block2">
+        <input type="text" id="yhry" name="yhry" placeholder="请输入与会人员" class="layui-input2">
+    </div>
+    <input type="button" id="xzyhry" class="layui-btn layui-btn-primary" title="选择与会人员" value="..." style="margin:-50px 10px 2px 10px">
+
+    <!--<div class="layui-input-block">-->
+
+    <!--</div>-->
+</div>
+<div class="layui-form-item">
+    <div class="layui-inline">
+        <label class="layui-form-label">会议地点</label>
+        <div class=" layui-inline">
+            <input type="text" name="hydd" id="hydd" placeholder="请输入会议地点" class="layui-input" style="display: inline"/>
+        </div>
+        <input type="button" id="xzhydd" class="layui-btn layui-btn-primary" title="选择会议地点" value="...">
+    </div>
+</div>
+
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.springmvc.service.impl;
 
 import com.springmvc.dao.PlaceDao;
+import com.springmvc.dao.PropertyDao;
 import com.springmvc.dao.WorkerDao;
 import com.springmvc.dao.YjlyDao;
 import com.springmvc.entity.*;
@@ -24,6 +25,9 @@ public class YjlyServiceImpl implements YjlyService {
 
     @Resource
     private PlaceDao placeDao;
+
+    @Resource
+    private PropertyDao propertyDao;
 
     /**
      * 分页查询所有会议
@@ -170,4 +174,14 @@ public class YjlyServiceImpl implements YjlyService {
     public List<Place> findPlaceByDW(Place place) {
         return placeDao.findPlaceByDW(place);
     }
+
+    /**
+     * 查询所有配置项
+     */
+    @Override
+    public List<Property> findAllProperty() {
+        return propertyDao.findAllProperty();
+    }
+
+
 }

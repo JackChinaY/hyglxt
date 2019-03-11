@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.springmvc.dao.PropertyDao">
+    <!--
+    实体类和数据库之间的字段映射
+　　1.id 必须唯一， 用于标示这个resultMap的唯一性，在使用resultMap的时候，就是通过id引用
+　　2.type 对应的返回类型，可以是javabean, 也可以是其它
+　　3.extends 继承其他resultMap标签
+    -->
+    <resultMap id="baseResultMap" type="com.springmvc.entity.Property">
+        <!--
+        1.id 唯一性，这个id用于标示这个javabean对象的唯一性， 不一定会是数据库的主键（不要把它理解为数据库对应表的主键）
+        2.property 实体类中属性名
+        3.column 对应数据库表的列名（这样，当javabean的属性与数据库对应表的列名不一致的时候，就能通过指定这个保持正常映射了）
+        4.jdbcType 表示数据库中该字段的类型
+　　     -->
+        <!--ID-->
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <!--key-->
+        <result property="key" column="key" jdbcType="VARCHAR"/>
+        <!--value-->
+        <result property="value" column="value" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--
+    id:具有唯一性，不可重复，值为Dao接口类中函数名
+    parameterType:传入SQL语句中的参数类型
+    resultType:查询返回的结果集类型，可以是Java包装型对象，或者实体类型对象，如java.lang.Integer、com.springmvc.entity.User
+    resultMap:对应于上面的resultMap，是查询返回的对象集合
+    -->
+
+    <!-- 查询所有配置项 会议级别/会议分类/会议属性 -->
+    <select id="findAllProperty" resultMap="baseResultMap">
+        SELECT *
+        FROM property
+        ORDER BY id
+    </select>
+</mapper>
